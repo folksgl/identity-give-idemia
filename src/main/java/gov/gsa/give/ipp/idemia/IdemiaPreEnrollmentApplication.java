@@ -1,13 +1,13 @@
-package gov.gsa.give.ipp;
+package gov.gsa.give.ipp.idemia;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class IdemiaApplication {
+public class IdemiaPreEnrollmentApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(IdemiaApplication.class, args);
+		SpringApplication.run(IdemiaPreEnrollmentApplication.class, args);
 	}
 
 }
