@@ -9,8 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import javax.annotation.PostConstruct;
 import java.time.Duration;
 
-public class IdemiaIppService {
-
+public class PreEnrollmentService {
     @Value("${idemia.endpoint}")
     private String idemiaEndpoint;
 
