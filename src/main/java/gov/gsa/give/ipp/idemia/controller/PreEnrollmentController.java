@@ -19,11 +19,6 @@ public class PreEnrollmentController {
     @Autowired
     PreEnrollmentService preEnrollmentService;
 
-    @GetMapping("/")
-    public Mono<String> helloWorld() {
-        return Mono.just("Hello World!");
-    }
-
     @PostMapping("/enrollment")
     public ResponseEntity<String> enrollment(@RequestBody IppReqApplicant applicant) {
         String response = preEnrollmentService.createIppApplicant(applicant);

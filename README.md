@@ -26,8 +26,6 @@ The Rest API is hosted on `localhost:8080`.
 
 ### Available Endpoints
 
-`GET /` - Only working endpoint
-
 `GET /enrollment`
 
 `GET /locations`
