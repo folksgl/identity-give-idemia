@@ -1,10 +1,7 @@
 package gov.gsa.give.ipp.idemia.controller;
 
-import gov.gsa.give.ipp.idemia.model.IppApplicantRequest;
-import gov.gsa.give.ipp.idemia.service.IdemiaUpdateService;
-import gov.gsa.give.ipp.idemia.service.LocationService;
+import gov.gsa.give.ipp.idemia.model.IppReqApplicant;
 import gov.gsa.give.ipp.idemia.service.PreEnrollmentService;
-import gov.gsa.give.ipp.idemia.service.RelyingPartyUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -14,9 +11,6 @@ public class PreEnrollmentController {
 
     @Autowired
     PreEnrollmentService preEnrollmentService;
-    LocationService locationService;
-    IdemiaUpdateService idemiaUpdateService;
-    RelyingPartyUpdateService relyingPartyUpdateService;
 
     @GetMapping("/")
     public Mono<String> helloWorld() {
@@ -24,8 +18,8 @@ public class PreEnrollmentController {
     }
 
     @PostMapping("/enrollment")
-    public Mono<String> enrollment(@RequestBody IppApplicantRequest request) {
-        return null;
+    public Mono<String> enrollment(@RequestBody IppReqApplicant applicant) {
+        return preEnrollmentService.createIppApplicant(applicant);
     }
 
     @GetMapping("/locations")

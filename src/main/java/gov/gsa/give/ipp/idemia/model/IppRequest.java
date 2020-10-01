@@ -1,6 +1,7 @@
 package gov.gsa.give.ipp.idemia.model;
 
-import java.util.UUID;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,19 +10,14 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@AllArgsConstructor
 @ToString
-public class IppApplicantRequest {
-    private UUID uuid;
-    private String firstName;
-    private String lastName;
-    private String zipCode;
-    private String emailAddress;
+public abstract class IppRequest {
     @JsonProperty("IPPVersion")
     private String ippVersion;
-
-    public IppApplicantRequest() {
-        uuid = UUID.randomUUID();
+    private Timestamp timestamp;
+    public IppRequest() {
         ippVersion = "1.5";
+        long time = new Date().getTime();
+        timestamp = new Timestamp(time);
     }
 }
