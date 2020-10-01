@@ -5,7 +5,7 @@
 ### Pre-requisites
 - [Maven](https://maven.apache.org/) 
 - [OpenJDK 8](https://developers.redhat.com/products/openjdk/download)
-- [Postman](https://www.postman.com/downloads/)
+- [Postman](https://www.postman.com/downloads/) (For test requests)
 
 ### Getting started
 Run `mvnw spring-boot:run` to build and run the application
@@ -35,3 +35,7 @@ The Rest API is hosted on `localhost:8080`.
 `POST /update`
 
 `PUT /update`
+
+### API Documentation
+
+Endpoints and model schemas can be viewed and tested using Swagger using the endpoints `/swagger-ui.html`.

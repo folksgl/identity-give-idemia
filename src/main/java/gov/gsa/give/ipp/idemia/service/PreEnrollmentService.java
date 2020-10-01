@@ -49,9 +49,9 @@ public class PreEnrollmentService {
      * @param applicant the PII associated with the applicant.
      * @return the enrollment code associated with the applicant.
      */
-    public Mono<String> createIppApplicant(IppReqApplicant applicant) {
+    public String createIppApplicant(IppReqApplicant applicant) {
         //applicant.setUp();
-        return Mono.just(applicant.toString());
+        return applicant.toString();
     }
 
     /**
@@ -59,7 +59,7 @@ public class PreEnrollmentService {
      * @param zipcode the address to run a search against.
      * @return a list of ipp locations near the given location with address, hours, and contact information.
      */
-    public Mono<List<IppLocation>> getIppLocationList(String zipcode) {
+    public List<IppLocation> getIppLocationList(String zipcode) {
 
         // Use this snippet as a guide.
         // return client
@@ -69,7 +69,7 @@ public class PreEnrollmentService {
         // .onStatus(HttpStatus::isError, ClientResponse::createException)
         // .bodyToMono(UspsScore.class);
 
-        return Mono.just(new ArrayList<IppLocation>());
+        return new ArrayList<IppLocation>();
     }
 
     /**
@@ -77,7 +77,7 @@ public class PreEnrollmentService {
      * @param uuid the {@link UUID} associated with the applicant.
      * @return the proofing result associated with the event.
      */
-    public Mono<String> getProofingResults(UUID uuid) {
-        return Mono.just(uuid.toString());
+    public String getProofingResults(UUID uuid) {
+        return uuid.toString();
     }
 }
