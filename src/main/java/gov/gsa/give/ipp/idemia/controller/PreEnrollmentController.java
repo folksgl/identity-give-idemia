@@ -1,10 +1,14 @@
 package gov.gsa.give.ipp.idemia.controller;
 
+import gov.gsa.give.ipp.idemia.model.IppLocation;
 import gov.gsa.give.ipp.idemia.model.IppReqApplicant;
 import gov.gsa.give.ipp.idemia.service.PreEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class PreEnrollmentController {
@@ -23,13 +27,13 @@ public class PreEnrollmentController {
     }
 
     @GetMapping("/locations")
-    public Mono<String> locations() {
-        return null;
+    public Mono<List<IppLocation>> locations(@RequestParam("zip") String zipcode) {
+        return preEnrollmentService.getIppLocationList(zipcode);
     }
 
     @GetMapping("/update")
-    public Mono<String> update() {
-        return null;
+    public Mono<String> update(@RequestParam("uuid") UUID uuid) {
+        return preEnrollmentService.getProofingResults(uuid);
     }
 
     @PutMapping("/update")
