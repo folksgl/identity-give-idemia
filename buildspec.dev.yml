@@ -33,9 +33,9 @@ phases:
       # Push app to cloud.gov and create a random route to avoid collision, but don't start it yet
       - cf push -m 512M --no-start --random-route
       # Set memory allocation for the JVM to 128M
-      - cf set-env identity-give-idemia JAVA_OPTS '-XX:ReservedCodeCacheSize=128M'
+      - cf set-env give-ipp-idemia JAVA_OPTS '-XX:ReservedCodeCacheSize=128M'
       # Start the application
-      - cf start identity-give-idemia
+      - cf start give-ipp-idemia
 reports:
   # Push test reports to AWS Code
   test-report:
