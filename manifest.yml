@@ -1,0 +1,7 @@
+---
+applications:
+  - name: give-ipp-idemia
+    buildpacks:
+      - java_buildpack
+    path: target/idemia-0.0.1-SNAPSHOT.jar
+    random-route: true
