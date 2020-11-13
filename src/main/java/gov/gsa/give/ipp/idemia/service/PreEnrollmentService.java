@@ -29,6 +29,8 @@ public class PreEnrollmentService {
 
     private WebClient client;
 
+    public PreEnrollmentService() {}
+
     @PostConstruct
     public void init() {
         client = WebClient
@@ -70,6 +72,16 @@ public class PreEnrollmentService {
         // .bodyToMono(UspsScore.class);
 
         return new ArrayList<IppLocation>();
+    }
+
+    /**
+     * Updates the status of an enrolled individual with the status parameter.
+     * @param ueid the Idemia assigned value for the individual.
+     * @param status the new status for the individual.
+     * @return updated status associated with individual.
+     */
+    public String updateProofingResults(String ueid, String status) {
+        return status;
     }
 
     /**
