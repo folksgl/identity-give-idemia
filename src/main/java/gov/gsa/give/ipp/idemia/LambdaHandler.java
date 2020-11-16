@@ -40,13 +40,13 @@ public class LambdaHandler extends SpringBootRequestHandler<APIGatewayProxyReque
         super();
     }
 
-    /*@Override
+    @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context) {
         initialize(context);
         Object input = convertEvent(event);
         Publisher<?> output = apply(extract(input));
         return result(input, output);
-    }*/
+    }
 
     protected Object convertEvent(APIGatewayProxyRequestEvent event) {
 
@@ -56,7 +56,7 @@ public class LambdaHandler extends SpringBootRequestHandler<APIGatewayProxyReque
         }
 
         if (functionAcceptsMessage()) {
-            return new GenericMessage<Object>(body, getHeaders(event));
+            return new GenericMessage<>(body, getHeaders(event));
         } else {
             return body;
         }
@@ -75,7 +75,7 @@ public class LambdaHandler extends SpringBootRequestHandler<APIGatewayProxyReque
     }
 
     private MessageHeaders getHeaders(APIGatewayProxyRequestEvent event) {
-        Map<String, Object> headers = new HashMap<String, Object>();
+        Map<String, Object> headers = new HashMap<>();
         if (event.getHeaders() != null) {
             headers.putAll(event.getHeaders());
         }
@@ -116,7 +116,7 @@ public class LambdaHandler extends SpringBootRequestHandler<APIGatewayProxyReque
     }
 
     private Map<String, String> toResponseHeaders(MessageHeaders messageHeaders) {
-        Map<String, String> responseHeaders = new HashMap<String, String>();
+        Map<String, String> responseHeaders = new HashMap<>();
         messageHeaders.forEach((key, value) -> responseHeaders.put(key, value.toString()));
         return responseHeaders;
     }

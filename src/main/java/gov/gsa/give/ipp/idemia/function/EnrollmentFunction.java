@@ -18,7 +18,7 @@ public class EnrollmentFunction implements Consumer<Message<IppReqApplicant>> {
     @Override
     public void accept(Message<IppReqApplicant> message) {
         IppReqApplicant applicant = message.getPayload();
-        preEnrollmentService.createIppApplicant(applicant);
-        System.out.println("User enrolled");
+        String result = preEnrollmentService.createIppApplicant(applicant);
+        System.out.println(result);
     }
 }
