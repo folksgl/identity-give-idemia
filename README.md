@@ -26,7 +26,7 @@ The Rest API is hosted on `localhost:3000`.
 
 ### Available Endpoints
 
-#####`GET /enrollment`
+`GET /enrollment`
 ```
 // Example Request Body
 {
@@ -37,15 +37,15 @@ The Rest API is hosted on `localhost:3000`.
 }
 ```
 
-#####`GET /location`
+`GET /location`
 
 Required query parameter `zip` containing a valid ZIP code.
 
-#####`GET /update`
+`GET /update`
 
 Required query parameter `uuid` containing a valid UUID.
 
-#####`PUT /update`
+`PUT /update`
 
 Required query parameter `ueid` containing a valid Idemia UEID.
 ```
