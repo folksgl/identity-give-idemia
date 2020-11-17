@@ -1,11 +1,10 @@
-package gov.gsa.give.ipp.idemia.model;
+package gov.gsa.give.ipp.idemia.model.request;
 
 import java.sql.Timestamp;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 

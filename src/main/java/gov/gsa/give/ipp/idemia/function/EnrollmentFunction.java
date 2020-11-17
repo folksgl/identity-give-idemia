@@ -1,38 +1,40 @@
 package gov.gsa.give.ipp.idemia.function;
 
-import gov.gsa.give.ipp.idemia.model.IppLocation;
-import gov.gsa.give.ipp.idemia.model.IppReqApplicant;
+import gov.gsa.give.ipp.idemia.model.request.IppApplicant;
+import gov.gsa.give.ipp.idemia.model.response.IppResponse;
+import gov.gsa.give.ipp.idemia.model.response.IppStatus;
 import gov.gsa.give.ipp.idemia.service.PreEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
-
+/**
+ * POST /enrollment - Enrollment Spring Cloud Function that enrolls an individual with Idemia's IPP service.
+ */
 @Component
-public class EnrollmentFunction implements Function<Message<IppReqApplicant>, Message<String>> {
+public class EnrollmentFunction implements Function<Message<IppApplicant>, Message<IppResponse>> {
 
     @Autowired
     PreEnrollmentService preEnrollmentService;
 
+    /**
+     * Invocation of the EnrollmentFunction. Proxies request to Idemia UEP API for a UEID, which is used to check on individual's IPP event status.
+     *
+     * @param message - {@link IppApplicant} wrapped in a {@link Message} containing Idemia required information.
+     * @return Result from Idemia UEP API.
+     */
     @Override
-    public Message<String> apply(Message<IppReqApplicant> message) {
-        IppReqApplicant applicant = message.getPayload();
-
-        System.out.println("*****\nINSIDE ENROLLMENT FUNCTION\n");
-
-        System.out.println("Headers:\n" + message.getHeaders());
+    public Message<IppResponse> apply(Message<IppApplicant> message) {
+        IppApplicant applicant = message.getPayload();
 
         String result = preEnrollmentService.createIppApplicant(applicant);
-        System.out.println(result);
-        Message<String> response = MessageBuilder.withPayload("Success")
-                .setHeader("contentType", "application/json").build();
+        IppResponse ippResponse = new IppStatus(result);
 
-        System.out.println("\n*****");
+        Message<IppResponse> response = MessageBuilder.withPayload(ippResponse)
+                .setHeader("contentType", "application/json").build();
 
         return response;
     }

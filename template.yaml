@@ -38,3 +38,29 @@ Resources:
           Properties:
             Path: /location
             Method: GET
+  GetStatusFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Description: Gets the ipp event status of an individual
+      Environment:
+        Variables:
+          FUNCTION_NAME: getStatusFunction
+      Events:
+        GetLocation:
+          Type: Api
+          Properties:
+            Path: /update
+            Method: GET
+  UpdateStatusFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Description: Updates the ipp event status of an individual
+      Environment:
+        Variables:
+          FUNCTION_NAME: getUpdateFunction
+      Events:
+        GetLocation:
+          Type: Api
+          Properties:
+            Path: /update
+            Method: PUT

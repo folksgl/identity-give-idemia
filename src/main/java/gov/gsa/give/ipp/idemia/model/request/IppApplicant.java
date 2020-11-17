@@ -1,4 +1,4 @@
-package gov.gsa.give.ipp.idemia.model;
+package gov.gsa.give.ipp.idemia.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class IppReqApplicant extends IppRequest{
+public class IppApplicant extends IppRequest {
     private UUID uuid;
     private String firstName;
     private String lastName;

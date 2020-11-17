@@ -1,4 +1,4 @@
-package gov.gsa.give.ipp.idemia.model;
+package gov.gsa.give.ipp.idemia.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
