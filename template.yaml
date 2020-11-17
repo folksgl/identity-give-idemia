@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Globals:
+  Function:
+    Runtime: java8
+    Timeout: 180
+    MemorySize: 1024
+    Handler: gov.gsa.give.ipp.idemia.LambdaHandler
+    Environment:
+      Variables:
+        MAIN_CLASS: gov.gsa.give.ipp.idemia.IdemiaPreEnrollmentApplication
+  Api:
+    EndpointConfiguration: REGIONAL
+Resources:
+  EnrollmentFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Description: Enrolls a user with the Idemia IPP service
+      Environment:
+        Variables:
+          FUNCTION_NAME: getEnrollmentFunction
+      Events:
+        EnrollApplicant:
+          Type: Api
+          Properties:
+            Path: /enrollment
+            Method: POST
+  LocationFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Description: Gets the ipp locations based on a given zip code
+      Environment:
+        Variables:
+          FUNCTION_NAME: getLocationFunction
+      Events:
+        GetLocation:
+          Type: Api
+          Properties:
+            Path: /location
+            Method: GET

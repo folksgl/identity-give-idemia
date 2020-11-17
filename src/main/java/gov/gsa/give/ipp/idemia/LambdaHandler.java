@@ -44,16 +44,25 @@ public class LambdaHandler extends SpringBootRequestHandler<APIGatewayProxyReque
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent event, Context context) {
         initialize(context);
         Object input = convertEvent(event);
+        System.out.println("Input:\n" + input.toString() + "\n");
         Publisher<?> output = apply(extract(input));
+        APIGatewayProxyResponseEvent convOutput = convertOutput(output);
+        System.out.println("Output:\n" + convOutput.toString() + "\n");
+
+        System.out.println("Headers\n" + getHeaders(event) + "\n");
+
         return result(input, output);
     }
 
     protected Object convertEvent(APIGatewayProxyRequestEvent event) {
 
-        Object body = "";
+        Object body = new Object();
         if (event.getBody() != null) {
             body = deserializeBody(event.getBody());
         }
+
+        System.out.println("Body: " + body);
+        System.out.println("headers: " + getHeaders(event));
 
         if (functionAcceptsMessage()) {
             return new GenericMessage<>(body, getHeaders(event));

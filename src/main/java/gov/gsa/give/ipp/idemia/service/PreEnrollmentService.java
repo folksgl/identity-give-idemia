@@ -31,7 +31,7 @@ public class PreEnrollmentService {
 
     public PreEnrollmentService() {}
 
-    @PostConstruct
+    /*@PostConstruct
     public void init() {
         client = WebClient
                 .builder()
@@ -43,7 +43,7 @@ public class PreEnrollmentService {
                                 .enableLoggingRequestDetails(true))
                         .build())
                 .build();
-    }
+    }*/
 
     /**
      * Submits a request to create a new IPP applicant to the UEP API. If the applicant is created
