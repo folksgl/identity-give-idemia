@@ -5,35 +5,52 @@
 ### Pre-requisites
 - [Maven](https://maven.apache.org/) 
 - [OpenJDK 8](https://developers.redhat.com/products/openjdk/download)
-- [Postman](https://www.postman.com/downloads/) (For test requests)
+- [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+- [Docker](https://www.docker.com/products/docker-desktop)
 
-### Getting started
-Run `mvnw spring-boot:run` to build and run the application
+### Build/Local Deploy
 
-This poject was created with [Spring Boot Initializr](https://start.spring.io/)
+`sam build`
 
-### Available Scripts
+Builds the project.
 
-`mvnw clean install`
+`docker network create --driver=bridge sam_network`
 
-Builds the .jar files (including aws .jar file for lambda usage)
+Sets up a custom Docker network (intended for future local DynamoDB instances).
 
-`mvnw spring-boot:run`
+`sam local start-api --docker-network sam_network`
 
 Runs the application.
 
-The Rest API is hosted on `localhost:8080`.
+The Rest API is hosted on `localhost:3000`.
 
 ### Available Endpoints
 
-`GET /enrollment`
+#####`GET /enrollment`
+```
+// Example Request Body
+{
+  "uuid": "c7b82090-172f-11eb-adc1-0242ac120002",
+  "firstName": "Peter",
+  "lastName": "Shumate",
+  "emailAddress": "test@email.com"
+}
+```
 
-`GET /locations`
+#####`GET /location`
 
-`POST /update`
+Required query parameter `zip` containing a valid ZIP code.
 
-`PUT /update`
+#####`GET /update`
 
-### API Documentation
+Required query parameter `uuid` containing a valid UUID.
 
-Endpoints and model schemas can be viewed and tested using Swagger using the endpoints `/swagger-ui.html`.
+#####`PUT /update`
+
+Required query parameter `ueid` containing a valid Idemia UEID.
+```
+// Example Request Body
+{
+  "ippstatus" : "IPP passed, identity successfully verified"
+}
+```
