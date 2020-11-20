@@ -1,8 +1,14 @@
-HELP.md
+Idemia-Microservice/HELP.md
 target/
 !idemia-microservice/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+### AWS ###
+.aws-sam/
+packaged.yaml
+.cdk.staging
+cdk.out
 
 ### STS ###
 .apt_generated
