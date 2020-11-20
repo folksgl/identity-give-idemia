@@ -37,15 +37,15 @@ The Rest API is hosted on `localhost:3000`.
 }
 ```
 
-`GET /location`
+`GET /locations`
 
 Required query parameter `zip` containing a valid ZIP code.
 
-`GET /update`
+`GET /enrollment`
 
 Required query parameter `uuid` containing a valid UUID.
 
-`PUT /update`
+`PUT /enrollment`
 
 Required query parameter `ueid` containing a valid Idemia UEID.
 ```

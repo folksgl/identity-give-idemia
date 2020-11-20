@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 
 /**
- * GET /location - Location Spring Cloud Function that finds IPP locations based a provided ZIP code.
+ * GET /locations - Location Spring Cloud Function that finds IPP locations based a provided ZIP code.
  */
 @Component
 public class LocationFunction implements Function<Message<Void>, Message<List<IppLocation>>> {

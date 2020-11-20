@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Function;
 
 /**
- * PUT /update - Status Update Spring Cloud Function that updates an individual's IPP event status based on a provided UEID.
+ * PUT /enrollment - Status Update Spring Cloud Function that updates an individual's IPP event status based on a provided UEID.
  */
 @Component
 public class UpdateFunction implements Function<Message<IppUpdate>, Message<IppResponse>> {

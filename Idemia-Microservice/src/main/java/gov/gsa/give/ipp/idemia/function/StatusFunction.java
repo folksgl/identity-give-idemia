@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 /**
- * GET /update - Status Spring Cloud Function that gets the status of an individual associated with the given UUID.
+ * GET /enrollment - Status Spring Cloud Function that gets the status of an individual associated with the given UUID.
  */
 @Component
 public class StatusFunction implements Function<Message<Void>, Message<IppResponse>> {

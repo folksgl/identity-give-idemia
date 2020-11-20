@@ -36,7 +36,7 @@ Resources:
         GetLocation:
           Type: Api
           Properties:
-            Path: /location
+            Path: /locations
             Method: GET
   GetStatusFunction:
     Type: 'AWS::Serverless::Function'
@@ -49,7 +49,7 @@ Resources:
         GetLocation:
           Type: Api
           Properties:
-            Path: /update
+            Path: /enrollment
             Method: GET
   UpdateStatusFunction:
     Type: 'AWS::Serverless::Function'
@@ -62,5 +62,5 @@ Resources:
         GetLocation:
           Type: Api
           Properties:
-            Path: /update
+            Path: /enrollment
             Method: PUT
