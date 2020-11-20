@@ -1,5 +1,5 @@
 Idemia-Microservice/HELP.md
-target/
+Idemia-Microservice/target/
 !idemia-microservice/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -20,7 +20,7 @@ cdk.out
 .sts4-cache
 
 ### IntelliJ IDEA ###
-idemia-microservice/.idea
+.idea/
 *.iws
 *.iml
 *.ipr
