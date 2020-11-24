@@ -86,7 +86,7 @@ public class PipelineStack extends Stack {
         CloudFormationCreateReplaceChangeSetAction createChangeSet = new CloudFormationCreateReplaceChangeSetAction(CloudFormationCreateReplaceChangeSetActionProps.builder()
                 .actionName("CreateChangeSet")
                 .templatePath(buildOutput.atPath("packaged.yaml"))
-                .stackName("sam-app")
+                .stackName("identity-give-ipp-idemia")
                 .adminPermissions(true)
                 .changeSetName("identity-give-ipp-idemia-dev-changeset")
                 .runOrder(1)
@@ -94,7 +94,7 @@ public class PipelineStack extends Stack {
 
         CloudFormationExecuteChangeSetAction executeChangeSet = new CloudFormationExecuteChangeSetAction(CloudFormationExecuteChangeSetActionProps.builder()
                 .actionName("Deploy")
-                .stackName("sam-app")
+                .stackName("identity-give-ipp-idemia")
                 .changeSetName("identity-give-ipp-idemia-dev-changeset")
                 .runOrder(2)
                 .build());

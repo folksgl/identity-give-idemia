@@ -2,7 +2,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      java: corretto8
+      java: corretto11
     commands:
       # Install packages or any pre-reqs in this phase.
       # Upgrading SAM CLI to latest version
