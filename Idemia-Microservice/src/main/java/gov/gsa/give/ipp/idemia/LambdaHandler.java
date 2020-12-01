@@ -3,6 +3,7 @@ package gov.gsa.give.ipp.idemia;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.function.adapter.aws.SpringBootRequestHandler;
@@ -45,7 +46,7 @@ public class LambdaHandler extends SpringBootRequestHandler<APIGatewayProxyReque
         initialize(context);
         Object input = convertEvent(event);
         Publisher<?> output = apply(extract(input));
-        APIGatewayProxyResponseEvent convOutput = convertOutput(output);
+        //APIGatewayProxyResponseEvent convOutput = convertOutput(output);
 
         return result(input, output);
     }
