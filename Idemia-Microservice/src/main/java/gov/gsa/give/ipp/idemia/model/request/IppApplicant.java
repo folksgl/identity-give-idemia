@@ -10,7 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString(callSuper = true)
 public class IppApplicant extends IppRequest {
-    private UUID uuid;
+    private String uuid;
     private String firstName;
     private String lastName;
     private String emailAddress;
