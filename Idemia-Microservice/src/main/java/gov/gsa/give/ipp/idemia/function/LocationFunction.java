@@ -3,12 +3,10 @@ package gov.gsa.give.ipp.idemia.function;
 import gov.gsa.give.ipp.idemia.model.response.*;
 import gov.gsa.give.ipp.idemia.service.MessageBuilderService;
 import gov.gsa.give.ipp.idemia.service.PreEnrollmentService;
-import org.json.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,7 +39,7 @@ public class LocationFunction implements Function<Message<Void>, Message<IppResp
 
         // catch bad/non existent zip codes before making a request to the Idemia API.
         if (zip == null || !zip.matches(regex)) {
-            IppResponse ippError = new IppError(ErrorMessage.INVALID_ZIP.value);
+            IppResponse ippError = new IppError(GiveMessage.INVALID_ZIP.value);
             Message<IppResponse> response = messageBuilderService.buildMessagewithStatusCode(ippError, HttpStatus.BAD_REQUEST.value());
             return response;
         }

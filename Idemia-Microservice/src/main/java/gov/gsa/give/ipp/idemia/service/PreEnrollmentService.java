@@ -1,7 +1,10 @@
 package gov.gsa.give.ipp.idemia.service;
 
+import gov.gsa.give.ipp.idemia.model.response.IppError;
 import gov.gsa.give.ipp.idemia.model.response.IppLocation;
 import gov.gsa.give.ipp.idemia.model.request.IppApplicant;
+import gov.gsa.give.ipp.idemia.model.response.IppResponse;
+import gov.gsa.give.ipp.idemia.model.response.IppStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -32,9 +35,7 @@ public class PreEnrollmentService {
      * @param applicant the PII associated with the applicant.
      * @return the enrollment code associated with the applicant.
      */
-    public String createIppApplicant(IppApplicant applicant) {
-        return "Applicant could not be enrolled";
-    }
+    public void createIppApplicant(IppApplicant applicant) { }
 
     /**
      * Submits a request to the UEP API to search for ipp locations near a supplied address.
@@ -61,7 +62,7 @@ public class PreEnrollmentService {
      * @param uuid the {@link UUID} associated with the applicant.
      * @return the proofing result associated with the event.
      */
-    public String getProofingResults(UUID uuid) {
-        return "No status available";
+    public IppResponse getProofingResults(UUID uuid) {
+        return new IppStatus("No status available");
     }
 }

@@ -1,12 +1,14 @@
 package gov.gsa.give.ipp.idemia.function;
 
+import gov.gsa.give.ipp.idemia.model.response.GiveMessage;
+import gov.gsa.give.ipp.idemia.model.response.IppError;
 import gov.gsa.give.ipp.idemia.model.response.IppResponse;
-import gov.gsa.give.ipp.idemia.model.response.IppStatus;
+import gov.gsa.give.ipp.idemia.service.MessageBuilderService;
 import gov.gsa.give.ipp.idemia.service.PreEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -20,6 +22,8 @@ public class StatusFunction implements Function<Message<Void>, Message<IppRespon
 
     @Autowired
     PreEnrollmentService preEnrollmentService;
+    @Autowired
+    MessageBuilderService messageBuilderService;
 
     /**
      * Invocation of the StatusFunction. Gets the status of an individual associated with the given UUID passed as a query parameter.
@@ -29,16 +33,25 @@ public class StatusFunction implements Function<Message<Void>, Message<IppRespon
     @Override
     public Message<IppResponse> apply(Message<Void> message) {
 
-        MessageHeaders metaInfo = message.getHeaders();
-        UUID uuid = UUID.fromString((String) metaInfo.get("uuid"));
+        UUID uuid;
+        // catch bad/non existent UUIDs
+        try {
+            MessageHeaders metaInfo = message.getHeaders();
+            uuid = UUID.fromString((String) metaInfo.get("uuid"));
+        } catch (IllegalArgumentException e) {
+            IppResponse ippResponse = new IppError(GiveMessage.INVALID_UUID.value);
+            Message<IppResponse> response = messageBuilderService.buildMessagewithStatusCode(ippResponse, HttpStatus.BAD_REQUEST.value());
+            return response;
+        }
 
-        System.out.println(uuid);
+        IppResponse ippResponse = preEnrollmentService.getProofingResults(uuid);
 
-        String status = preEnrollmentService.getProofingResults(uuid);
-        IppResponse ippResponse = new IppStatus(status);
+        int statuscode = HttpStatus.OK.value();
+        if (ippResponse instanceof IppError) {
+            statuscode = HttpStatus.BAD_REQUEST.value();
+        }
 
-        Message<IppResponse> response = MessageBuilder.withPayload(ippResponse)
-                .setHeader("contentType", "application/json").build();
+        Message<IppResponse> response = messageBuilderService.buildMessagewithStatusCode(ippResponse, statuscode);
         return response;
     }
 }
