@@ -1,6 +1,8 @@
 package gov.gsa.give.ipp.idemia.model.response;
 
 public enum GiveMessage {
+    INVALID_STATUS("Invalid/Missing Status"),
+    INVALID_UEID("Invalid/Missing UEID"),
     USER_ENROLLED("User Enrolled Successfully"),
     INVALID_ZIP("Invalid/Missing ZIP code"),
     INVALID_UUID("Invalid/Missing UUID"),

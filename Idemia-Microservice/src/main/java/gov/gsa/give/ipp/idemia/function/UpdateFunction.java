@@ -2,14 +2,19 @@ package gov.gsa.give.ipp.idemia.function;
 
 import gov.gsa.give.ipp.idemia.model.request.IppApplicant;
 import gov.gsa.give.ipp.idemia.model.request.IppUpdate;
+import gov.gsa.give.ipp.idemia.model.response.GiveMessage;
 import gov.gsa.give.ipp.idemia.model.response.IppDefault;
+import gov.gsa.give.ipp.idemia.model.response.IppError;
 import gov.gsa.give.ipp.idemia.model.response.IppResponse;
+import gov.gsa.give.ipp.idemia.service.MessageBuilderService;
 import gov.gsa.give.ipp.idemia.service.PreEnrollmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.function.Function;
 
 /**
@@ -20,6 +25,8 @@ public class UpdateFunction implements Function<Message<IppUpdate>, Message<IppR
 
     @Autowired
     PreEnrollmentService preEnrollmentService;
+    @Autowired
+    MessageBuilderService messageBuilderService;
 
     /**
      * Invocation of the UpdateFunction. Retrieves UEID from query parameter and updates status associated with UEID with the provided status.
@@ -31,9 +38,20 @@ public class UpdateFunction implements Function<Message<IppUpdate>, Message<IppR
 
         String ueid = (String) message.getHeaders().get("ueid");
         IppUpdate update = message.getPayload();
-        String status = update.getIppstatus();
 
-        String result = preEnrollmentService.updateProofingResults(ueid, status);
+        ArrayList<String> errorList = new ArrayList<>();
+        if (ueid == null /* need to get information on ueid regex */) {
+            errorList.add(GiveMessage.INVALID_UEID.value);
+        }
+        if (update.getIppstatus() == null) {
+            errorList.add(GiveMessage.INVALID_STATUS.value);
+        }
+        if (!errorList.isEmpty()) {
+            IppResponse error = new IppError(errorList.toArray(new String[errorList.size()]));
+            return messageBuilderService.buildMessagewithStatusCode(error, HttpStatus.BAD_REQUEST.value());
+        }
+
+        String result = preEnrollmentService.updateProofingResults(ueid, update.getIppstatus());
         IppResponse ippResponse = new IppDefault(result);
 
         Message<IppResponse> response = MessageBuilder.withPayload(ippResponse)

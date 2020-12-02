@@ -38,10 +38,9 @@ public class StatusFunction implements Function<Message<Void>, Message<IppRespon
         try {
             MessageHeaders metaInfo = message.getHeaders();
             uuid = UUID.fromString((String) metaInfo.get("uuid"));
-        } catch (IllegalArgumentException e) {
-            IppResponse ippResponse = new IppError(GiveMessage.INVALID_UUID.value);
-            Message<IppResponse> response = messageBuilderService.buildMessagewithStatusCode(ippResponse, HttpStatus.BAD_REQUEST.value());
-            return response;
+        } catch (IllegalArgumentException | NullPointerException e) {
+            IppResponse ippResponse = new IppError(new String[]{GiveMessage.INVALID_UUID.value});
+            return messageBuilderService.buildMessagewithStatusCode(ippResponse, HttpStatus.BAD_REQUEST.value());
         }
 
         IppResponse ippResponse = preEnrollmentService.getProofingResults(uuid);
