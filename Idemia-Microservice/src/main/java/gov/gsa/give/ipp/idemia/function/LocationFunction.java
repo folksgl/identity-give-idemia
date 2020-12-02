@@ -9,6 +9,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.function.Function;
 
@@ -39,15 +40,13 @@ public class LocationFunction implements Function<Message<Void>, Message<IppResp
 
         // catch bad/non existent zip codes before making a request to the Idemia API.
         if (zip == null || !zip.matches(regex)) {
-            IppResponse ippError = new IppError(GiveMessage.INVALID_ZIP.value);
-            Message<IppResponse> response = messageBuilderService.buildMessagewithStatusCode(ippError, HttpStatus.BAD_REQUEST.value());
-            return response;
+            IppResponse ippError = new IppError(new String[]{GiveMessage.INVALID_ZIP.value});
+            return messageBuilderService.buildMessagewithStatusCode(ippError, HttpStatus.BAD_REQUEST.value());
         }
 
         List<IppLocation> locations = preEnrollmentService.getIppLocationList(zip);
         IppResponse ippResponse = new IppLocationList(locations);
 
-        Message<IppResponse> response = messageBuilderService.buildMessagewithStatusCode(ippResponse, HttpStatus.OK.value());
-        return response;
+        return messageBuilderService.buildMessagewithStatusCode(ippResponse, HttpStatus.OK.value());
     }
 }

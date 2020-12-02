@@ -42,7 +42,7 @@ public class EnrollmentFunction implements Function<Message<IppApplicant>, Messa
         ArrayList<String> errorList = new ArrayList<>();
         try {
             uuid = UUID.fromString((String) applicant.getUuid());
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NullPointerException e) {
             errorList.add(GiveMessage.INVALID_UUID.value);
         }
         if (applicant.getFirstName() == null) {
@@ -55,7 +55,7 @@ public class EnrollmentFunction implements Function<Message<IppApplicant>, Messa
             errorList.add(GiveMessage.INVALID_EMAIL.value);
         }
         if (!errorList.isEmpty()) {
-            IppResponse error = new IppError((String[]) errorList.toArray());
+            IppResponse error = new IppError(errorList.toArray(new String[errorList.size()]));
             return messageBuilderService.buildMessagewithStatusCode(error, HttpStatus.BAD_REQUEST.value());
         }
 
