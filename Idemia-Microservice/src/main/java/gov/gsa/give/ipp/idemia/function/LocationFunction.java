@@ -44,7 +44,14 @@ public class LocationFunction implements Function<Message<Void>, Message<IppResp
             return messageBuilderService.buildMessagewithStatusCode(ippError, HttpStatus.BAD_REQUEST.value());
         }
 
-        List<IppLocation> locations = preEnrollmentService.getIppLocationList(zip);
+        List<IppLocation> locations;
+        try {
+            locations = preEnrollmentService.getIppLocationList(zip);
+        } catch (Exception e) {
+        // will become specific error depending on exception thrown in PreEnrollmentService
+            IppResponse error = new IppError(new String[]{""});
+            return messageBuilderService.buildMessagewithStatusCode(error, HttpStatus.BAD_REQUEST.value());
+        }
         IppResponse ippResponse = new IppLocationList(locations);
 
         return messageBuilderService.buildMessagewithStatusCode(ippResponse, HttpStatus.OK.value());

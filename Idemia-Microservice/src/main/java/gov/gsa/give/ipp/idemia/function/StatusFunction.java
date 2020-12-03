@@ -43,14 +43,15 @@ public class StatusFunction implements Function<Message<Void>, Message<IppRespon
             return messageBuilderService.buildMessagewithStatusCode(ippResponse, HttpStatus.BAD_REQUEST.value());
         }
 
-        IppResponse ippResponse = preEnrollmentService.getProofingResults(uuid);
-
-        int statuscode = HttpStatus.OK.value();
-        if (ippResponse instanceof IppError) {
-            statuscode = HttpStatus.BAD_REQUEST.value();
+        IppResponse ippResponse;
+        try {
+            ippResponse = preEnrollmentService.getProofingResults(uuid);
+        } catch (Exception e) {
+            // will become specific error depending on exception thrown in PreEnrollmentService
+            IppResponse error = new IppError(new String[]{""});
+            return messageBuilderService.buildMessagewithStatusCode(error, HttpStatus.BAD_REQUEST.value());
         }
 
-        Message<IppResponse> response = messageBuilderService.buildMessagewithStatusCode(ippResponse, statuscode);
-        return response;
+        return messageBuilderService.buildMessagewithStatusCode(ippResponse, HttpStatus.OK.value());
     }
 }

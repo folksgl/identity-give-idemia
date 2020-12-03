@@ -51,12 +51,17 @@ public class UpdateFunction implements Function<Message<IppUpdate>, Message<IppR
             return messageBuilderService.buildMessagewithStatusCode(error, HttpStatus.BAD_REQUEST.value());
         }
 
-        String result = preEnrollmentService.updateProofingResults(ueid, update.getIppstatus());
+        String result;
+        try {
+            result = preEnrollmentService.updateProofingResults(ueid, update.getIppstatus());
+        } catch (Exception e) {
+            // will become specific error depending on exception thrown in PreEnrollmentService
+            IppResponse error = new IppError(new String[]{""});
+            return messageBuilderService.buildMessagewithStatusCode(error, HttpStatus.BAD_REQUEST.value());
+        }
+
         IppResponse ippResponse = new IppDefault(result);
 
-        Message<IppResponse> response = MessageBuilder.withPayload(ippResponse)
-                .setHeader("contentType", "application/json").build();
-
-        return response;
+        return messageBuilderService.buildMessagewithStatusCode(ippResponse, HttpStatus.NO_CONTENT.value());
     }
 }
