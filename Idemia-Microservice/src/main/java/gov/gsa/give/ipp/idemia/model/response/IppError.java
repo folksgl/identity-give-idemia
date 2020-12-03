@@ -10,5 +10,5 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(callSuper = true)
 public class IppError extends IppResponse {
-    private String[] error;
+    private String[] errors;
 }
