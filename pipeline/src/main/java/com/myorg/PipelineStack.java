@@ -44,7 +44,7 @@ public class PipelineStack extends Stack {
         GitHubSourceAction gitHubSource = new GitHubSourceAction(GitHubSourceActionProps.builder()
                 .actionName("GitHub_Source")
                 .repo("identity-give-ipp-idemia")
-                .owner("pshumateEDC")
+                .owner("dzaslavskiy")
                 .branch("main")
                 .oauthToken(SecretValue.secretsManager(secretsManagerSecretId.getValueAsString(), SecretsManagerSecretOptions.builder()
                         .jsonField(secretsManagerJsonKey.getValueAsString())
@@ -86,16 +86,16 @@ public class PipelineStack extends Stack {
         CloudFormationCreateReplaceChangeSetAction createChangeSet = new CloudFormationCreateReplaceChangeSetAction(CloudFormationCreateReplaceChangeSetActionProps.builder()
                 .actionName("CreateChangeSet")
                 .templatePath(buildOutput.atPath("packaged.yaml"))
-                .stackName("identity-give-ipp-idemia")
+                .stackName("ipp-idemia")
                 .adminPermissions(true)
-                .changeSetName("identity-give-ipp-idemia-dev-changeset")
+                .changeSetName("ipp-idemia-changeset")
                 .runOrder(1)
                 .build());
 
         CloudFormationExecuteChangeSetAction executeChangeSet = new CloudFormationExecuteChangeSetAction(CloudFormationExecuteChangeSetActionProps.builder()
                 .actionName("Deploy")
                 .stackName("identity-give-ipp-idemia")
-                .changeSetName("identity-give-ipp-idemia-dev-changeset")
+                .changeSetName("ipp-idemia-changeset")
                 .runOrder(2)
                 .build());
 
