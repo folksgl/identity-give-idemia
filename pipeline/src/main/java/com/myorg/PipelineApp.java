@@ -8,7 +8,7 @@ public class PipelineApp {
     public static void main(final String[] args) {
         App app = new App();
 
-        new PipelineStack(app, "identity-give-ipp-idemia-cicd");
+        new PipelineStack(app, "ipp-idemia-cicd");
 
         app.synth();
     }
