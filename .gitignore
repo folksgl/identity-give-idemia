@@ -1,39 +1,8 @@
-Idemia-Microservice/HELP.md
-Idemia-Microservice/target/
-!idemia-microservice/.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### AWS ###
-.aws-sam/
-packaged.yaml
-.cdk.staging
+.chalice/deployments/
+.chalice/deployed/
+.chalice/venv/
+venv*
+__pycache__
 cdk.out
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea/
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
-.vscode/
+.vscode
