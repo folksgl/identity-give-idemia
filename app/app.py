@@ -1,6 +1,6 @@
 from chalice import Chalice
 
-app = Chalice(app_name="give_idemia_microservice")
+app = Chalice(app_name="ipp-idemia")
 
 
 @app.route("/enrollment", methods=["POST"])
