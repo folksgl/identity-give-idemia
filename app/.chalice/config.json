@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "app_name": "give_idemia_microservice",
+  "app_name": "ipp-idemia",
   "automatic_layer": true,
   "stages": {
     "dev": {
