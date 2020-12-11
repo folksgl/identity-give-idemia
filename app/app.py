@@ -1,6 +1,4 @@
-"""
-Idemia Microservice Chalice Lambda Functions.
-"""
+""" Sample Chalice "hello world" application """
 import json
 from chalice import Chalice
 
@@ -9,7 +7,7 @@ with open(".chalice/config.json") as config_file:
     print(json.dumps(CONFIG))
 
 if "app_name" not in CONFIG:
-    print("Please configure 'app_name' in app/.chalice/config.json")
+    raise KeyError("No 'app_name' configured in app/.chalice/config.json")
 
 APP_NAME = CONFIG.get("app_name")
 
