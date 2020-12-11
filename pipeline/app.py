@@ -1,21 +1,28 @@
+""" AWS CDK Application for creating a PipelineStack """
 #!/usr/bin/env python3
 
+import json
 from aws_cdk import core
-
 from pipeline_stack import PipelineStack
 
 
-app = core.App()
+APP = core.App()
 
-app_name = "ipp-idemia"
-pipeline_stack_name = f"{app_name}-pipeline"
+with open("../app/.chalice/config.json") as config_file:
+    CONFIG = json.load(config_file)
+
+if "app_name" not in CONFIG:
+    print("Please configure 'app_name' in app/.chalice/config.json")
+
+APP_NAME = CONFIG.get("app_name")
+PIPELINE_STACK_NAME = f"{APP_NAME}-pipeline"
 
 PipelineStack(
-    app,
-    app_name,
-    stack_name=pipeline_stack_name,
+    APP,
+    APP_NAME,
+    stack_name=PIPELINE_STACK_NAME,
     repo_owner="18F",
     repo_name="identity-give-ipp-idemia",
 )
 
-app.synth()
+APP.synth()
