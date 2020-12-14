@@ -1,5 +1,4 @@
 """ Sample Chalice "hello world" application """
-import json
 from chalice import Chalice
 
 
