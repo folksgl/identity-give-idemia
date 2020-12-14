@@ -24,6 +24,7 @@ PipelineStack(
     stack_name=PIPELINE_STACK_NAME,
     repo_owner="18F",
     repo_name="identity-give-ipp-idemia",
+    repo_branch="main",
 )
 
 APP.synth()
