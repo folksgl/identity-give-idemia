@@ -1,8 +1,5 @@
-.chalice/deployments/
-.chalice/deployed/
-.chalice/venv/
+db.sqlite*
+
 venv*
 __pycache__
-cdk.out
-
 .vscode
