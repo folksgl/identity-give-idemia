@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,10 +21,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "l)c#im)iyw1*y6g!ebyffxhxz4bh-w1m2khsk-%%b!^@%z(=@e"
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Default to False unless environment variable is present
+_DJANGO_DEBUG_OPTION = False
+if "DJANGO_DEBUG" in os.environ:
+    _DJANGO_DEBUG_OPTION = os.environ["DJANGO_DEBUG"]
+
+DEBUG = _DJANGO_DEBUG_OPTION
 
 ALLOWED_HOSTS = []
 
