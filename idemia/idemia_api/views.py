@@ -5,7 +5,7 @@ from .serializers import EnrollmentRecordSerializer
 
 
 class EnrollmentRecordCreate(generics.CreateAPIView):
-    """ Create and list EnrollmentRecord objects """
+    """ Create EnrollmentRecord objects """
 
     queryset = EnrollmentRecord.objects.all()
     serializer_class = EnrollmentRecordSerializer
