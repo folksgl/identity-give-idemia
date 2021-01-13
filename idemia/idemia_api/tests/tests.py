@@ -1,12 +1,12 @@
 """ Run basic CRUD tests on EnrollmentRecord objects """
 import uuid
-import json
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 
 
 def generate_enrollment_record_data() -> dict:
+    """ Helper method for generating data for an EnrollmentRecord """
     return {"record_uuid": uuid.uuid1(), "first_name": "Bob", "last_name": "Testington"}
 
 
