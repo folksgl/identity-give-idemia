@@ -26,7 +26,7 @@ class EnrollmentRecord(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["creation_date"]
+        ordering = ["-creation_date"]
 
     @property
     def status(self):
