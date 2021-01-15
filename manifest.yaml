@@ -1,0 +1,15 @@
+---
+version: 1
+applications:
+  - name: ipp-idemia
+    random-route: true
+    memory: ((memory))
+    instances: ((instances))
+    services:
+      - ipp-idemia-db
+    buildpacks:
+      - python_buildpack
+    env:
+      DJANGO_DEBUG: ((DJANGO_DEBUG))
+      DJANGO_SECRET_KEY: ((DJANGO_SECRET_KEY))
+      DJANGO_DEBUG: False
