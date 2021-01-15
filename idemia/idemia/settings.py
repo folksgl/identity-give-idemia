@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
-import json
 from pathlib import Path
 from cfenv import AppEnv
 
@@ -84,18 +83,18 @@ WSGI_APPLICATION = "idemia.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-env = AppEnv()
-db_vars = env.get_service(label="aws-rds")
-db_info = db_vars.credentials
+ENV = AppEnv()
+DB_VARS = ENV.get_service(label="aws-rds")
+DB_INFO = DB_VARS.credentials
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": db_info["db_name"],
-        "USER": db_info["username"],
-        "PASSWORD": db_info["password"],
-        "HOST": db_info["host"],
-        "PORT": db_info["port"],
+        "NAME": DB_INFO["db_name"],
+        "USER": DB_INFO["username"],
+        "PASSWORD": DB_INFO["password"],
+        "HOST": DB_INFO["host"],
+        "PORT": DB_INFO["port"],
     }
 }
 
