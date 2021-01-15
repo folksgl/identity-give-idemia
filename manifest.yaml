@@ -10,6 +10,5 @@ applications:
     buildpacks:
       - python_buildpack
     env:
-      DJANGO_DEBUG: ((DJANGO_DEBUG))
       DJANGO_SECRET_KEY: ((DJANGO_SECRET_KEY))
       DJANGO_DEBUG: False
