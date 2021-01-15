@@ -25,7 +25,9 @@ pre-commit install
 Installation of dependencies and commit hooks should be installed and ready to go now. To run the application locally:
 ```sh
 cd idemia
-python manage.py runserver
+python manage.py migrate
+python manage.py collectstatic
+gunicorn -b 127.0.0.1:8080 idemia.wsgi
 ```
 
 ### Deploying the application to Cloud.gov
