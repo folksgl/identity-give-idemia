@@ -104,12 +104,12 @@ if VCAP_ENV_VAR in os.environ:
     }
 else:
     # Local development -- use local DB info
-    DB_INFO = {
+    DB_DICT = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 
-DATABASES = {"default": DB_INFO}
+DATABASES = {"default": DB_DICT}
 
 
 # Password validation
