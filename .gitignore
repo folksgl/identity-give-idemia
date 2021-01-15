@@ -1,5 +1,7 @@
 db.sqlite*
 static/
+vars.yaml
+vars.yml
 
 venv*
 __pycache__
