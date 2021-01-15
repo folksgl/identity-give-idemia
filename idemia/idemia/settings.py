@@ -17,7 +17,10 @@ from cfenv import AppEnv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, "static")
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = "/static/"
+STATICFILES_DIRS = (os.path.join(PROJECT_DIR, "static"),)
 
 
 # Quick-start development settings - unsuitable for production
@@ -83,12 +86,15 @@ WSGI_APPLICATION = "idemia.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-ENV = AppEnv()
-DB_VARS = ENV.get_service(label="aws-rds")
-DB_INFO = DB_VARS.credentials
+VCAP_ENV_VAR = "VCAP_APPLICATION"
 
-DATABASES = {
-    "default": {
+if VCAP_ENV_VAR in os.environ:
+    # Deployment to Cloud.gov -- Set DB to RDS
+    ENV = AppEnv()
+    RDS_VARS = ENV.get_service(label="aws-rds")
+    DB_INFO = RDS_VARS.credentials
+
+    DB_DICT = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": DB_INFO["db_name"],
         "USER": DB_INFO["username"],
@@ -96,7 +102,14 @@ DATABASES = {
         "HOST": DB_INFO["host"],
         "PORT": DB_INFO["port"],
     }
-}
+else:
+    # Local development -- use local DB info
+    DB_INFO = {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+
+DATABASES = {"default": DB_INFO}
 
 
 # Password validation
