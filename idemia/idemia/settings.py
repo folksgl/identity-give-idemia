@@ -84,8 +84,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "idemia.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# The VCAP_APPLICATION environment variable is set by cloud.gov and
+# populated with service information needed to connect to the database.
 VCAP_ENV_VAR = "VCAP_APPLICATION"
 
 if VCAP_ENV_VAR in os.environ:
@@ -109,6 +109,8 @@ else:
         "NAME": BASE_DIR / "db.sqlite3",
     }
 
+# Database
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 DATABASES = {"default": DB_DICT}
 
 
