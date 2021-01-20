@@ -37,7 +37,7 @@ All deployments require having the correct Cloud.gov credentials in place. If yo
 
 The application database must be deployed prior to the application, and can be deployed with the following commands:
 ```sh
-cf create-service aws-rds <service-instance> ipp-idemia-db
+cf create-service aws-rds <plan> ipp-idemia-db
 ```
 
 *You must wait* until the database has completed provisioning to continue with the deployment. Wait for the status of `cf service ipp-idemia-db` to change to `create succeeded`
