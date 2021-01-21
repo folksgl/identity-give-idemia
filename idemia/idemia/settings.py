@@ -147,3 +147,27 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "app_format": {
+            "format": '{levelname}:{module}:"{message}"',
+            "style": "{",
+        }
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "app_format",
+        },
+    },
+    "loggers": {
+        # unnamed logger config applies to all modules using the defualt logging.<x> calls
+        "": {
+            "handlers": ["console"],
+            "level": "INFO",
+        }
+    },
+}
