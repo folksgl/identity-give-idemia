@@ -11,4 +11,3 @@ applications:
       - python_buildpack
     env:
       SECRET_KEY: ((SECRET_KEY))
-      DEBUG: False
