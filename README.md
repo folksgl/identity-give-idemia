@@ -40,7 +40,7 @@ The application database must be deployed prior to the application, and can be d
 cf create-service aws-rds <plan> ipp-idemia-db
 ```
 
-*You must wait* until the database has completed provisioning to continue with the deployment. Wait for the status of `cf service ipp-idemia-db` to change to `create succeeded`
+*You must wait* until the database has completed provisioning to continue with the deployment. Wait for the `status` field of `cf service ipp-idemia-db` to change from `create in progress` to `create succeeded`.
 ```sh
 watch -n 15 cf service ipp-idemia-db
 ```
