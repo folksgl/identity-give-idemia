@@ -9,7 +9,7 @@ class LocationsTest(APITestCase):
 
     def test_locations(self):
         """ Ensure that the /locations endpoint returns location data """
-        url = reverse("locations")
+        url = reverse("locations", args=[00000])
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
