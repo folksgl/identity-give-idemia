@@ -5,6 +5,7 @@ Idemia In-Person-Proofing Microservice
 - [Installation](#installation)
     - [Setting Up](#setting-up-your-environment)
 - [Deploying the application](#deploying-the-application-to-cloud.gov)
+- [API Endpoints](#api-endpoints)
 
 ## Overview
 The Idemia microservice is a Python Django application that uses the Django Rest Framework to expose an API for in-person-proofing functions to GIVE.
@@ -21,6 +22,8 @@ source venv/bin/activate
 python3 -m pip install -r requirements.txt -r requirements-dev.txt
 pre-commit install
 ```
+
+If you are not able to install `psycopg2`, please make sure you have `libpq-dev` installed on your system. For apt, use the following `sudo apt install -y libpq-dev`
 
 Installation of dependencies and commit hooks should be installed and ready to go now. To run the application locally:
 ```sh
@@ -40,9 +43,16 @@ The application database must be deployed prior to the application, and can be d
 cf create-service aws-rds <plan> ipp-idemia-db
 ```
 
-*You must wait* until the database has completed provisioning to continue with the deployment. Wait for the status of `cf service ipp-idemia-db` to change to `create succeeded`
+*You must wait* until the database has completed provisioning to continue with the deployment. Wait for the `status` field of `cf service ipp-idemia-db` to change from `create in progress` to `create succeeded`.
 ```sh
 watch -n 15 cf service ipp-idemia-db
 ```
 
 After the database has come up, running `cf push --vars-file vars.yaml` with an appropriately populated `vars.yaml` file should successfully deploy the application.
+
+### API Endpoints
+#### /enrollment
+Idemia pre-enrollment API functionality.
+
+#### /locations
+Exposes in-person proofing locations via the idemia UEP locations API

@@ -26,6 +26,8 @@ class EnrollmentRecord(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """ EnrollmentRecord Model metadata """
+
         ordering = ["-creation_date"]
 
     @property
