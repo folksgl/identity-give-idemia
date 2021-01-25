@@ -5,6 +5,7 @@ Idemia In-Person-Proofing Microservice
 - [Installation](#installation)
     - [Setting Up](#setting-up-your-environment)
 - [Deploying the application](#deploying-the-application-to-cloud.gov)
+- [API Endpoints](#api-endpoints)
 
 ## Overview
 The Idemia microservice is a Python Django application that uses the Django Rest Framework to expose an API for in-person-proofing functions to GIVE.
@@ -48,3 +49,10 @@ watch -n 15 cf service ipp-idemia-db
 ```
 
 After the database has come up, running `cf push --vars-file vars.yaml` with an appropriately populated `vars.yaml` file should successfully deploy the application.
+
+### API Endpoints
+#### /enrollment
+Idemia pre-enrollment API functionality.
+
+#### /locations
+Exposes in-person proofing locations via the idemia UEP locations API
