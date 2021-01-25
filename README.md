@@ -22,6 +22,8 @@ python3 -m pip install -r requirements.txt -r requirements-dev.txt
 pre-commit install
 ```
 
+If you are not able to install `psycopg2`, please make sure you have `libpq-dev` installed on your system. For apt, use the following `sudo apt install -y libpq-dev`
+
 Installation of dependencies and commit hooks should be installed and ready to go now. To run the application locally:
 ```sh
 cd idemia
