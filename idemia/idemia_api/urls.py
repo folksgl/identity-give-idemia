@@ -7,6 +7,7 @@ from . import views
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path("locations/", views.location_view, name="locations"),
+    path("locations/<int:zipcode>", views.location_view, name="locations"),
     path("enrollment/", views.EnrollmentRecordCreate.as_view(), name="enrollment"),
     path(
         "enrollment/<uuid:pk>",

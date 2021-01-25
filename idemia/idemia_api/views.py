@@ -55,7 +55,7 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
 
 
 @api_view(http_method_names=["GET"])
-def location_view(_request):
+def location_view(_request, zipcode=None):
     """ Exposes the /locations idemia UEP endpoint """
     logging.info("Calling Idemia /locations endpoint")
 
