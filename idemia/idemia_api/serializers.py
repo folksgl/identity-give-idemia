@@ -7,5 +7,7 @@ class EnrollmentRecordSerializer(serializers.ModelSerializer):
     """ Serializer for EnrollmentRecord objects """
 
     class Meta:
+        """ EnrollmentRecordSerializer metadata """
+
         model = EnrollmentRecord
         fields = "__all__"
