@@ -117,15 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
 
@@ -148,26 +142,21 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+if DEBUG:
+    DEBUG_LEVEL = "DEBUG"
+else:
+    DEBUG_LEVEL = "INFO"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "app_format": {
-            "format": '{levelname}:{module}:"{message}"',
-            "style": "{",
-        }
+        "app_format": {"format": '{levelname}:{module}:"{message}"', "style": "{",}
     },
     "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "app_format",
-        },
+        "console": {"class": "logging.StreamHandler", "formatter": "app_format",},
     },
     "loggers": {
         # unnamed logger config applies to all modules using the defualt logging.<x> calls
-        "": {
-            "handlers": ["console"],
-            "level": "INFO",
-        }
+        "": {"handlers": ["console"], "level": DEBUG_LEVEL,}
     },
 }
