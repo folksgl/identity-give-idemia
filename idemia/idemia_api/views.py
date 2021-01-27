@@ -15,7 +15,10 @@ from .serializers import EnrollmentRecordSerializer
 
 
 def log_transaction():
-    """ Log a transaction to the transaction logging microservice """
+    """
+    Log a transaction to the transaction logging microservice.
+    Returns True if the logging attempt was successful.
+    """
     logging.info("Logging a transaction to /transaction")
     if settings.DEBUG:
         logging.debug("Skipping transaction logging while in debug mode")
@@ -33,14 +36,12 @@ def log_transaction():
         }
 
         response = requests.post(transaction_url, data=payload)
-        logging.info(
-            "URL: %s\nresponse: %s", transaction_url, response.text,
-        )
-    except Exception as err:
-        logging.error("Error sending transaction log %s", err)
-        return False
+        response.raise_for_status()  # Raises HTTPError, if one occurred.
+        return True
+    except requests.exceptions.RequestException as error:
+        logging.error("Request raised exception: %s", error)
 
-    return response.status_code == status.HTTP_201_CREATED
+    return False
 
 
 class EnrollmentRecordCreate(CreateAPIView):
@@ -56,7 +57,10 @@ class EnrollmentRecordCreate(CreateAPIView):
             if response.status_code == status.HTTP_201_CREATED:
                 logging.info("Record Created -- POST to idemia /pre-enrollments")
         else:
-            response = Response({"message": "Transaction logging failed. Aborting.."})
+            response = Response(
+                {"message": "Transaction logging failed. Aborting.."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
         return response
 
 
