@@ -7,7 +7,7 @@ from rest_framework import status
 
 def generate_enrollment_record_data() -> dict:
     """ Helper method for generating data for an EnrollmentRecord """
-    return {"record_uuid": uuid.uuid1(), "first_name": "Bob", "last_name": "Testington"}
+    return {"record_uuid": uuid.uuid4(), "first_name": "Bob", "last_name": "Testington"}
 
 
 def create_enrollment_record(client):
@@ -19,6 +19,8 @@ def create_enrollment_record(client):
     url = reverse("enrollment")
     record_data = generate_enrollment_record_data()
     response = client.post(url, record_data)
+    print(f"Test user creation reponse code: {response.status_code}")
+    print(f"Test user creation data: {response.data}")
     assert response.status_code == status.HTTP_201_CREATED
 
     return (response, record_data)
