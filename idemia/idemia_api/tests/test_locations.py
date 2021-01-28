@@ -18,14 +18,15 @@ class LocationsTest(APITestCase):
 
         location_data = response.data[0]
         data_keys = [
-            "externalId",
-            "name",
-            "phoneNumber",
-            "timeZone",
+            "title",
             "address",
-            "details",
-            "geocode",
+            "address2",
+            "city",
+            "state",
+            "postalCode",
+            "distance",
             "hours",
-            "programAvailability",
+            "phone",
+            "geocode",
         ]
         self.assertEqual(list(location_data.keys()), data_keys)
