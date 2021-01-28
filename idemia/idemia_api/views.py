@@ -1,5 +1,8 @@
 """ Views for Idemia API """
 import logging
+import uuid
+import requests
+from django.conf import settings
 from rest_framework.generics import (
     CreateAPIView,
     RetrieveUpdateDestroyAPIView,
@@ -11,6 +14,36 @@ from .models import EnrollmentRecord
 from .serializers import EnrollmentRecordSerializer
 
 
+def log_transaction():
+    """
+    Log a transaction to the transaction logging microservice.
+    Returns True if the logging attempt was successful.
+    """
+    logging.info("Logging a transaction to /transaction")
+    if settings.DEBUG:
+        logging.debug("Skipping transaction logging while in debug mode")
+        return True  # Skip sending a transaction log in debug mode
+    try:
+        service_url = "https://identity-give-transaction-logging.app.cloud.gov"
+        transaction_url = f"{service_url}/transaction/"
+        payload = {
+            "record_uuid": uuid.uuid4(),
+            "service_type": "PROOFING SERVICE",
+            "customer": "test_customer",
+            "csp": "test_csp",
+            "cost": 0,
+            "result": "test_result",
+        }
+
+        response = requests.post(transaction_url, data=payload)
+        response.raise_for_status()  # Raises HTTPError, if one occurred.
+        return True
+    except requests.exceptions.RequestException as error:
+        logging.error("Request raised exception: %s", error)
+
+    return False
+
+
 class EnrollmentRecordCreate(CreateAPIView):
     """ Create EnrollmentRecord objects """
 
@@ -19,9 +52,15 @@ class EnrollmentRecordCreate(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         """ Create an enrollment record. POST to idemia /pre-enrollments endpoint """
-        response = super().create(request, *args, **kwargs)
-        if response.status_code == status.HTTP_201_CREATED:
-            logging.info("Record Created -- POST to idemia /pre-enrollments")
+        if log_transaction():
+            response = super().create(request, *args, **kwargs)
+            if response.status_code == status.HTTP_201_CREATED:
+                logging.info("Record Created -- POST to idemia /pre-enrollments")
+        else:
+            response = Response(
+                {"message": "Transaction logging failed. Aborting.."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
         return response
 
 
