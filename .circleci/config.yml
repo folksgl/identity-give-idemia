@@ -14,7 +14,7 @@ jobs:
       - python/install-packages:
           args: black
           pkg-manager: pip
-      - lint:
+      - run:
           command: |
             black .
           name: Lint - Black
