@@ -59,7 +59,7 @@ def location_view(_request, zipcode):
     """ Exposes the /locations idemia UEP endpoint """
     logging.info("Calling Idemia /locations endpoint with zipcode: %s", zipcode)
 
-    # Dummy location info (taken from idemia api response documentation)
+    # Dummy location info 
     location_list = [
     {
         "title": "IdentoGO - TSA PreCheck&#8482",
