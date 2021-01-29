@@ -24,8 +24,7 @@ def log_transaction():
         logging.debug("Skipping transaction logging while in debug mode")
         return True  # Skip sending a transaction log in debug mode
 
-    service_url = "https://identity-give-transaction-log.app.cloud.gov"
-    transaction_url = f"{service_url}/transaction/"
+    transaction_url = "https://identity-give-transaction-log.app.cloud.gov/transaction/"
     payload = {
         "service_type": "PROOFING SERVICE",
         "customer": "test_customer",
