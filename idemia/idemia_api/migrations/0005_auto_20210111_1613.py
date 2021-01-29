@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name="enrollmentrecord", options={"ordering": ["-creation_date"]},
+            name="enrollmentrecord",
+            options={"ordering": ["-creation_date"]},
         ),
     ]

@@ -148,6 +148,10 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+if DEBUG:
+    DEBUG_LEVEL = "DEBUG"
+else:
+    DEBUG_LEVEL = "INFO"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -167,7 +171,7 @@ LOGGING = {
         # unnamed logger config applies to all modules using the defualt logging.<x> calls
         "": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": DEBUG_LEVEL,
         }
     },
 }
