@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/18F/identity-give-ipp-idemia.svg?style=svg)](https://circleci.com/gh/18F/identity-give-ipp-idemia)
+[![CircleCI](https://circleci.com/gh/18F/identity-give-ipp-idemia.svg?style=shield)](https://circleci.com/gh/18F/identity-give-ipp-idemia)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Idemia In-Person-Proofing Microservice
