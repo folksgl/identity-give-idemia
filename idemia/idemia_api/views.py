@@ -23,17 +23,18 @@ def log_transaction():
     if settings.DEBUG:
         logging.debug("Skipping transaction logging while in debug mode")
         return True  # Skip sending a transaction log in debug mode
-    try:
-        service_url = "https://identity-give-transaction-log.app.cloud.gov"
-        transaction_url = f"{service_url}/transaction/"
-        payload = {
-            "service_type": "PROOFING SERVICE",
-            "customer": "test_customer",
-            "csp": "test_csp",
-            "cost": 0,
-            "result": "test_result",
-        }
 
+    service_url = "https://identity-give-transaction-log.app.cloud.gov"
+    transaction_url = f"{service_url}/transaction/"
+    payload = {
+        "service_type": "PROOFING SERVICE",
+        "customer": "test_customer",
+        "csp": "test_csp",
+        "cost": 0,
+        "result": "test_result",
+    }
+
+    try:
         response = requests.post(transaction_url, data=payload)
         response.raise_for_status()  # Raises HTTPError, if one occurred.
         return True
