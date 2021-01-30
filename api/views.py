@@ -4,7 +4,7 @@ import uuid
 import requests
 from django.conf import settings
 from rest_framework.generics import (
-    CreateAPIView,
+    ListCreateAPIView,
     RetrieveUpdateDestroyAPIView,
 )
 from rest_framework import status
@@ -43,7 +43,7 @@ def log_transaction():
     return False
 
 
-class EnrollmentRecordCreate(CreateAPIView):
+class EnrollmentRecordCreate(ListCreateAPIView):
     """ Create EnrollmentRecord objects """
 
     queryset = EnrollmentRecord.objects.all()

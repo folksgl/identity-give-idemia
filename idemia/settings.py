@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "idemia_api.apps.IdemiaApiConfig",
+    "api.apps.IdemiaApiConfig",
     "rest_framework",
 ]
 

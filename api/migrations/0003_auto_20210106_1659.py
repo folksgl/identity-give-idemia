@@ -7,7 +7,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("idemia_api", "0002_auto_20210106_1602"),
+        ("api", "0002_auto_20210106_1602"),
     ]
 
     operations = [
