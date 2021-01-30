@@ -3,6 +3,6 @@ static/
 vars.yaml
 vars.yml
 
-venv*
+.venv
 __pycache__
 .vscode
