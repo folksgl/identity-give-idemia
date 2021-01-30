@@ -24,7 +24,6 @@ jobs:
           pkg-manager: pip
       - run:
           command: |
-            cd idemia
             python manage.py test --debug-mode
           name: Test
 workflows:
