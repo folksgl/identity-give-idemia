@@ -1,8 +1,11 @@
 """ Run basic CRUD tests on EnrollmentRecord objects """
 import uuid
+import requests
+from unittest import mock
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
+from api.views import TransactionServiceUnavailable
 
 
 def generate_enrollment_record_data() -> dict:
@@ -19,9 +22,6 @@ def create_enrollment_record(client):
     url = reverse("enrollment")
     record_data = generate_enrollment_record_data()
     response = client.post(url, record_data)
-    print(f"Test user creation reponse code: {response.status_code}")
-    print(f"Test user creation data: {response.data}")
-    assert response.status_code == status.HTTP_201_CREATED
 
     return (response, record_data)
 
@@ -40,8 +40,27 @@ class EnrollmentAllowedMethodTest(APITestCase):
         self.assertEqual(allowed_methods, ["POST"])
 
 
+def mocked_requests_post1(*args, **kwargs):
+    response = requests.Response()
+    response.status_code = 503
+    return response
+
+
 class EnrollmentRecordCRUDTest(APITestCase):
     """ Test crud operations on EnrollmentRecord objects """
+
+    def test_post_enrollment(self):
+        """ Test basic enrollment record creation """
+        response, record_data = create_enrollment_record(self.client)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @mock.patch("requests.post", side_effect=mocked_requests_post1)
+    def test_fail_logging(self, mock_post):
+        """ Test response to failed transaction logging """
+        print("MOCK METHOD")
+        create_enrollment_record(self.client)
+        self.assertRaises(TransactionServiceUnavailable)
 
     def test_get_enrollment(self):
         """ Create a user, then test the 'get' operation on that user """
