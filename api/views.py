@@ -1,6 +1,5 @@
 """ Views for Idemia API """
 import logging
-import uuid
 import requests
 from django.conf import settings
 from rest_framework.generics import (
@@ -8,10 +7,21 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
 )
 from rest_framework import status
+from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import EnrollmentRecord
 from .serializers import EnrollmentRecordSerializer
+
+
+class TransactionServiceUnavailable(APIException):
+    """ Thrown during errors contacting the transaction logging service """
+
+    status_code = 503
+    default_detail = (
+        "Transaction logging service temporarily unavailable, try again later."
+    )
+    default_code = "service_unavailable"
 
 
 def log_transaction():
@@ -19,11 +29,13 @@ def log_transaction():
     Log a transaction to the transaction logging microservice.
     Returns True if the logging attempt was successful.
     """
-    logging.info("Logging a transaction to /transaction")
     if settings.DEBUG:
         logging.debug("Skipping transaction logging while in debug mode")
-        return True  # Skip sending a transaction log in debug mode
+        response = requests.Response()
+        response.status_code = 201
+        return response  # Skip sending a transaction log in debug mode
 
+    logging.info("Logging a transaction to /transaction")
     transaction_url = "https://identity-give-transaction-log.app.cloud.gov/transaction/"
     payload = {
         "service_type": "PROOFING SERVICE",
@@ -36,11 +48,10 @@ def log_transaction():
     try:
         response = requests.post(transaction_url, data=payload)
         response.raise_for_status()  # Raises HTTPError, if one occurred.
-        return True
     except requests.exceptions.RequestException as error:
         logging.error("Request raised exception: %s", error)
 
-    return False
+    return response
 
 
 class EnrollmentRecordCreate(CreateAPIView):
@@ -49,18 +60,14 @@ class EnrollmentRecordCreate(CreateAPIView):
     queryset = EnrollmentRecord.objects.all()
     serializer_class = EnrollmentRecordSerializer
 
-    def create(self, request, *args, **kwargs):
-        """ Create an enrollment record. POST to idemia /pre-enrollments endpoint """
-        if log_transaction():
-            response = super().create(request, *args, **kwargs)
-            if response.status_code == status.HTTP_201_CREATED:
-                logging.info("Record Created -- POST to idemia /pre-enrollments")
+    def perform_create(self, serializer):
+        """ Custom logic upon creating an enrollment record """
+        log_response = log_transaction()
+        if log_response.status_code == status.HTTP_201_CREATED:
+            serializer.save()
+            logging.info("Record Created -- POST to idemia /pre-enrollments")
         else:
-            response = Response(
-                {"message": "Transaction logging failed. Aborting.."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-        return response
+            raise TransactionServiceUnavailable()
 
 
 class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
@@ -69,27 +76,23 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
     queryset = EnrollmentRecord.objects.all()
     serializer_class = EnrollmentRecordSerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        """ Retrieve an enrollment record with the specified uuid """
-        response = super().retrieve(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        """ Custom logic upon retrieving an enrollment record """
+        response = self.retrieve(request, *args, **kwargs)
         if response.status_code == status.HTTP_200_OK:
             logging.info("Record Retrieved - GET on idemia /pre-enrollments/UEID")
-            logging.info("Call update() if status has changed")
+            logging.info("Call self.update() if status has changed")
         return response
 
-    def update(self, request, *args, **kwargs):
-        """ Update an enrollment record """
-        response = super().update(request, *args, **kwargs)
-        if response.status_code == status.HTTP_200_OK:
-            logging.info("Record Updated")
-        return response
+    def perform_update(self, serializer):
+        """ Custom logic upon updating an enrollment record """
+        logging.info("Record Updated")
+        serializer.save()
 
-    def destroy(self, request, *args, **kwargs):
-        """ Delete an enrollment record """
-        response = super().destroy(request, *args, **kwargs)
-        if response.status_code == status.HTTP_204_NO_CONTENT:
-            logging.info("Record Deleted")
-        return response
+    def perform_destroy(self, instance):
+        """ Custom logic upon deleting an enrollment record """
+        logging.info("Record Deleted")
+        instance.delete()
 
 
 @api_view(http_method_names=["GET"])
