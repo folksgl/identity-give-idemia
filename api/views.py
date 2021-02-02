@@ -61,6 +61,7 @@ class EnrollmentRecordCreate(CreateAPIView):
     serializer_class = EnrollmentRecordSerializer
 
     def perform_create(self, serializer):
+        """ Custom logic upon creating an enrollment record """
         log_response = log_transaction()
         if log_response.status_code == status.HTTP_201_CREATED:
             serializer.save()
@@ -76,7 +77,7 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
     serializer_class = EnrollmentRecordSerializer
 
     def get(self, request, *args, **kwargs):
-        """ Retrieve an enrollment record with the specified uuid """
+        """ Custom logic upon retrieving an enrollment record """
         response = self.retrieve(request, *args, **kwargs)
         if response.status_code == status.HTTP_200_OK:
             logging.info("Record Retrieved - GET on idemia /pre-enrollments/UEID")
@@ -89,6 +90,7 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
         serializer.save()
 
     def perform_destroy(self, instance):
+        """ Custom logic upon deleting an enrollment record """
         logging.info("Record Deleted")
         instance.delete()
 
