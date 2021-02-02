@@ -75,12 +75,12 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
     queryset = EnrollmentRecord.objects.all()
     serializer_class = EnrollmentRecordSerializer
 
-    def retrieve(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         """ Retrieve an enrollment record with the specified uuid """
-        response = super().retrieve(request, *args, **kwargs)
+        response = self.retrieve(request, *args, **kwargs)
         if response.status_code == status.HTTP_200_OK:
             logging.info("Record Retrieved - GET on idemia /pre-enrollments/UEID")
-            logging.info("Call update() if status has changed")
+            logging.info("Call self.update() if status has changed")
         return response
 
     def perform_update(self, serializer):
