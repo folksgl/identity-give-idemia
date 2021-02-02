@@ -1,6 +1,5 @@
 """ Views for Idemia API """
 import logging
-import uuid
 import requests
 from django.conf import settings
 from rest_framework.generics import (
@@ -15,9 +14,13 @@ from .models import EnrollmentRecord
 from .serializers import EnrollmentRecordSerializer
 
 
-class ServiceUnavailable(APIException):
+class TransactionServiceUnavailable(APIException):
+    """ Thrown during errors contacting the transaction logging service """
+
     status_code = 503
-    default_detail = "Service temporarily unavailable, try again later."
+    default_detail = (
+        "Transaction logging service temporarily unavailable, try again later."
+    )
     default_code = "service_unavailable"
 
 
@@ -28,7 +31,9 @@ def log_transaction():
     """
     if settings.DEBUG:
         logging.debug("Skipping transaction logging while in debug mode")
-        return True  # Skip sending a transaction log in debug mode
+        response = requests.Response()
+        response.status_code = 201
+        return response  # Skip sending a transaction log in debug mode
 
     logging.info("Logging a transaction to /transaction")
     transaction_url = "https://identity-give-transaction-log.app.cloud.gov/transaction/"
@@ -61,7 +66,7 @@ class EnrollmentRecordCreate(CreateAPIView):
             serializer.save()
             logging.info("Record Created -- POST to idemia /pre-enrollments")
         else:
-            raise ServiceUnavailable()
+            raise TransactionServiceUnavailable()
 
 
 class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
