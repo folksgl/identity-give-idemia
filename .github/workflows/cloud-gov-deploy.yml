@@ -13,12 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Test with Django unit tests
+      - name: Deploy to cloud.gov
         run: |
-          # Add the Cloud Foundry Foundation public key and package repository
-          INSTALLER_FILE_NAME='cf-cli-installer.deb'
-          wget -O $INSTALLER_FILE_NAME https://packages.cloudfoundry.org/stable?release=debian64&version=7.2.0&source=github-rel
-          sudo apt install ./$INSTALLER_FILE_NAME
-
-          # Deploy to cloud.gov
+          # Install the CloudFoundry CLI
+          brew install cloudfoundry/tap/cf-cli@7
           cf --version
