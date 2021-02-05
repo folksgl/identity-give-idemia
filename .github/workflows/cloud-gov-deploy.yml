@@ -17,7 +17,7 @@ jobs:
         run: |
           # Add the Cloud Foundry Foundation public key and package repository
           INSTALLER_FILE_NAME='cf-cli-installer.deb'
-          wget -O $INSTALLER_FILE_NAME https://packages.cloudfoundry.org/stable?release=debian64&version=v7&source=github
+          wget -O $INSTALLER_FILE_NAME https://packages.cloudfoundry.org/stable?release=debian64&version=7.2.0&source=github-rel
           sudo apt install ./$INSTALLER_FILE_NAME
 
           # Deploy to cloud.gov
