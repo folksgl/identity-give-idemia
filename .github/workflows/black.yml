@@ -1,4 +1,6 @@
 ---
+# This workflow will run the Black Python formatter
+# See https://black.readthedocs.io/en/stable/github_actions.html
 name: Black
 
 on:
