@@ -16,14 +16,9 @@ jobs:
       - name: Test with Django unit tests
         run: |
           # Add the Cloud Foundry Foundation public key and package repository
-          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
-          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
-
-          # Update local package index
-          sudo apt-get update
-
-          # Install CF CLI
-          sudo apt-get install cf7-cli
+          INSTALLER_FILE_NAME='cf-cli-installer.deb'
+          wget -O $INSTALLER_FILE_NAME https://packages.cloudfoundry.org/stable?release=debian64&version=v7&source=github
+          sudo apt install $INSTALLER_FILE_NAME
 
           # Deploy to cloud.gov
           cf --version
