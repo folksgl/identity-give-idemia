@@ -1,0 +1,29 @@
+---
+# This workflow will install Python dependencies and run tests
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - feature/cicd-deploy-actions
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test with Django unit tests
+        run: |
+          # Add the Cloud Foundry Foundation public key and package repository
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+
+          # Update local package index
+          sudo apt-get update
+
+          # Install CF CLI
+          sudo apt-get install cf7-cli
+
+          # Deploy to cloud.gov
+          cf --version
