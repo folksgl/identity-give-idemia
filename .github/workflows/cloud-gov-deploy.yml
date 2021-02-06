@@ -6,7 +6,7 @@ name: Deploy
 on:
   workflow_run:
     workflows: ["Tests"]
-    branches: [feature/cicd-deploy-actions]
+    branches: [main]
     types: [completed]
 
 jobs:
