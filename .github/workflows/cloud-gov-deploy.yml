@@ -4,6 +4,10 @@
 name: Deploy
 
 on:
+  workflow_run:
+    workflows: ["Tests"]
+    branches: [feature/cicd-deploy-actions]
+    types: [completed]
   push:
     branches:
       - feature/cicd-deploy-actions
