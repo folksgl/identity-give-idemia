@@ -84,7 +84,7 @@ cf create-service aws-rds <plan> ipp-idemia-db
 watch -n 15 cf service ipp-idemia-db
 ```
 
-After the database has come up, running `cf push --vars-file vars.yaml` with an appropriately populated `vars.yaml` file should successfully deploy the application.
+After the database has come up, running `cf push --vars-file vars.yaml --var SECRET_KEY=$SECRET_KEY`.
 
 ### API Endpoints
 #### /enrollment
