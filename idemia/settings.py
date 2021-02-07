@@ -29,15 +29,29 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # Default to False unless environment variable is present
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
+# Static file settings
+if DEBUG:
+    STATIC_URL = "/static/"
+    STATIC_ROOT = os.path.join(BASE_DIR, "idemia/static")
+    STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# Set production renderer to JSONRenderer instead of the browsable API
+if not DEBUG:
+    REST_FRAMEWORK = {
+        "DEFAULT_RENDERER_CLASSES": [
+            "rest_framework.renderers.JSONRenderer",
+        ]
+    }
+
 ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
+    "django.contrib.staticfiles",
     "api.apps.IdemiaApiConfig",
     "rest_framework",
 ]
