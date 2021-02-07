@@ -12,3 +12,4 @@ applications:
       - python_buildpack
     env:
       SECRET_KEY: ((SECRET_KEY))
+      DISABLE_COLLECTSTATIC: 1
