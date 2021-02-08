@@ -30,6 +30,8 @@ jobs:
           pip install -r requirements.txt
       - name: Test with Django unit tests
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          # For unit tests, secret_key just needs to be populated.
+          # It will only ever access a temporary Django test database.
+          SECRET_KEY: unit-test-fake-secret-key-#5TY90
         run: |
           python manage.py test --debug-mode
