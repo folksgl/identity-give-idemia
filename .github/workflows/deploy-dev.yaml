@@ -1,0 +1,29 @@
+---
+# This workflow will install Python dependencies and run tests
+
+name: Deploy-Dev
+
+on:
+  workflow_run:
+    workflows: ["Unit-Tests"]
+    branches: [main]
+    types: [completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy to cloud.gov
+        run: |
+          # Install the CloudFoundry CLI
+          brew install cloudfoundry/tap/cf-cli@7
+          cf --version
+
+          # Setup CF CLI
+          cf api https://api.fr.cloud.gov
+          cf auth ${{ secrets.CF_USERNAME }} ${{ secrets.CF_PASSWORD }}
+          cf target -o ${{ secrets.CF_ORG }} -s give-dev
+
+          # Deploy application
+          cf push --vars-file vars.yml --var SECRET_KEY=${{ secrets.SECRET_KEY }}

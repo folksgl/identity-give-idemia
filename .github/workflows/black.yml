@@ -1,0 +1,18 @@
+---
+# This workflow will run the Black Python formatter
+# See https://black.readthedocs.io/en/stable/github_actions.html
+name: Black
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: psf/black@stable
