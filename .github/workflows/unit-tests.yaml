@@ -1,7 +1,7 @@
 ---
 # This workflow will install Python dependencies and run tests
 
-name: Tests
+name: Unit-Tests
 
 on:
   push:

@@ -5,7 +5,7 @@ name: Deploy-Dev
 
 on:
   workflow_run:
-    workflows: ["Tests"]
+    workflows: ["Unit-Tests"]
     branches: [main]
     types: [completed]
 
