@@ -1,11 +1,11 @@
 ---
 # This workflow will install Python dependencies and run tests
 
-name: Deploy
+name: Deploy-Dev
 
 on:
   workflow_run:
-    workflows: ["Tests"]
+    workflows: ["Unit-Tests"]
     branches: [main]
     types: [completed]
 
@@ -23,7 +23,7 @@ jobs:
           # Setup CF CLI
           cf api https://api.fr.cloud.gov
           cf auth ${{ secrets.CF_USERNAME }} ${{ secrets.CF_PASSWORD }}
-          cf target -o ${{ secrets.CF_ORG }} -s ${{ secrets.CF_SPACE }}
+          cf target -o ${{ secrets.CF_ORG }} -s give-dev
 
           # Deploy application
           cf push --vars-file vars.yml --var SECRET_KEY=${{ secrets.SECRET_KEY }}
