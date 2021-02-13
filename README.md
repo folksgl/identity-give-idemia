@@ -9,16 +9,20 @@
 The Idemia microservice is a Python Django application that uses the Django Rest Framework to expose an API for in-person-proofing functions to GIVE.
 
 ## Table of Contents
-- [Installation](#installation)
-    - [Setting Up](#setting-up-your-environment)
-- [Deploying the application](#deploying-the-application-to-cloud.gov)
+- [CI/CD workflows](#ci/cd-workflows-with-github-actions)
+- [Local Installation](#building-locally)
+- [Deploying the application](#deploying-to-cloud.gov-during-development)
 - [API Endpoints](#api-endpoints)
 
-## Pre-requisites
-- [Python 3.9](https://www.python.org/)
-- [CloudFoundry CLI](https://docs.cloudfoundry.org/cf-cli/)
+## CI/CD Workflows with GitHub Actions
+The most up-to-date information about the CI/CD flows for this repo can be found in the [GitHub workflows directory](https://github.com/18F/identity-give-ipp-idemia/tree/main/.github/workflows)
 
 ## Building Locally
+
+### Pre-requisites
+Make sure you have the following installed if you intend to build the project locally.
+- [Python 3.9](https://www.python.org/)
+- [CloudFoundry CLI](https://docs.cloudfoundry.org/cf-cli/)
 
 ### Development Setup
 To set up your environment, run the following commands (or the equivalent commands if not using a bash-like terminal):
@@ -55,13 +59,13 @@ export SECRET_KEY=<your-secret-here>
 ```
 ```powershell
 # PowerShell
-Env:SECRET_KEY=<your-secret-here>
+$Env:SECRET_KEY=<your-secret-here>
 ```
 Note: during development, it may also be helpful to add the `DEBUG` environment variable and setting it to the string `True`
 
 
 ### Running the application
-After completing [development setup](#development-setup) and [environment variable setup](#required-environment-variables) you can run the application with:
+After completing [development setup](#development-setup) and [environment variable setup](#required-environment-variables) you can run the application locally with:
 ```shell
 python manage.py migrate
 python manage.py collectstatic
@@ -69,7 +73,7 @@ python manage.py test --debug-mode
 gunicorn -b 127.0.0.1:8080 idemia.wsgi
 ```
 
-### Deploying the application to Cloud.gov (manually)
+### Deploying to Cloud.gov during development
 All deployments require having the correct Cloud.gov credentials in place. If you haven't already, visit [Cloud.gov](https://cloud.gov) and set up your account and CLI.
 
 *manifest.yml* file contains the deployment configuration for cloud.gov, and expects a vars.yaml file that includes runtime variables referenced. For info, see [cloud foundry manifest files reference](https://docs.cloudfoundry.org/devguide/deploy-apps/manifest-attributes.html)
