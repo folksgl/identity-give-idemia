@@ -17,6 +17,6 @@ jobs:
           stale-pr-message: >-
             This issue has been automatically marked as stale because it has
             not had any activity in the last 30 days. Remove stale label or
-            comment or this will be closed in 5 days.'
+            comment or this will be closed in 5 days.
           days-before-stale: 30
           days-before-close: 5
