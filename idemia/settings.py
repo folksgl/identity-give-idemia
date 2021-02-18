@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "api.apps.IdemiaApiConfig",
     "rest_framework",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
