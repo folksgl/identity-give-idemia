@@ -11,6 +11,7 @@ on:
 
 jobs:
   deploy:
+    if: github.repository_owner == '18F'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,4 +27,4 @@ jobs:
           cf target -o ${{ secrets.CF_ORG }} -s give-dev
 
           # Deploy application
-          cf push --vars-file vars.yml --var SECRET_KEY=${{ secrets.SECRET_KEY }}
+          cf push --vars-file vars.yaml --var SECRET_KEY=${{ secrets.SECRET_KEY }}
