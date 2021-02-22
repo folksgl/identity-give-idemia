@@ -1,6 +1,7 @@
 ![Tests](https://github.com/18F/identity-give-ipp-idemia/workflows/Unit-Tests/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7a72205acec6d179707c/maintainability)](https://codeclimate.com/github/18F/identity-give-ipp-idemia/maintainability)
 ![Black](https://github.com/18F/identity-give-ipp-idemia/workflows/Black/badge.svg)
+![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)
 
 # Government Identity Verification Engine
 
