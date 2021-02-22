@@ -7,6 +7,12 @@
 The Idemia microservice is a Python Django application that uses the Django Rest Framework
 to expose an API for in-person-proofing functions to GIVE. 
 
+## Why this project
+The GIVE Idemia microservice aims to provide in-person proofing capabilites to the GIVE API via 
+its upstream Idema integration. The Idemia microservice has the following goals:
+* Provide locations for the in-person-proofing process
+* Expose the Idemia pre-enrollment endpoints
+
 ## CI/CD Workflows with GitHub Actions
 The most up-to-date information about the CI/CD flows for this repo can be found in the
 [GitHub workflows directory](https://github.com/18F/identity-give-ipp-idemia/tree/main/.github/workflows)
