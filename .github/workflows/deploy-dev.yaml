@@ -15,16 +15,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy to cloud.gov
+
+      - name: Install CloudFoundry CLI
         run: |
-          # Install the CloudFoundry CLI
           brew install cloudfoundry/tap/cf-cli@7
           cf --version
 
-          # Setup CF CLI
+      - name: Setup CF CLI auth and target environment
+        run: |
           cf api https://api.fr.cloud.gov
           cf auth ${{ secrets.CF_USERNAME }} ${{ secrets.CF_PASSWORD }}
           cf target -o ${{ secrets.CF_ORG }} -s give-dev
 
-          # Deploy application
+      - name: Deploy application
+        run: |
           cf push --vars-file vars.yaml --var SECRET_KEY=${{ secrets.SECRET_KEY }}
