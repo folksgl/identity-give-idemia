@@ -29,4 +29,4 @@ jobs:
 
       - name: Deploy application
         run: |
-          cf push --vars-file vars.yaml --var SECRET_KEY=${{ secrets.SECRET_KEY }}
+          cf push --vars-file vars.yaml --var SECRET_KEY=${{ secrets.SECRET_KEY }} --strategy rolling
