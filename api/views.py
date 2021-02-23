@@ -36,7 +36,9 @@ def log_transaction():
         return response  # Skip sending a transaction log in debug mode
 
     logging.info("Logging a transaction to /transaction")
-    transaction_url = "https://identity-give-transaction-log.app.cloud.gov/transaction/"
+    transaction_url = (
+        "http://identity-give-transaction-log.apps.internal:8080/transaction/"
+    )
     payload = {
         "service_type": "PROOFING SERVICE",
         "customer": "test_customer",
