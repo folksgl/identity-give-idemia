@@ -3,7 +3,7 @@ version: 1
 applications:
   - name: ipp-idemia
     routes:
-      - route: identity-give-ipp-private.apps.internal
+      - route: identity-give-ipp.apps.internal
     memory: ((memory))
     instances: ((instances))
     services:
