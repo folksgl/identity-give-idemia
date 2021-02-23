@@ -30,10 +30,12 @@ To set up your environment, run the following commands (or the equivalent comman
 # Clone the project
 git clone https://github.com/18F/identity-give-ipp-idemia
 cd identity-give-ipp-idemia
+
 # Set up Python virtual environment
 python3.9 -m venv .venv
 source venv/bin/activate
 # .venv\Scripts\Activate.ps1 on Windows
+
 # Install dependencies and pre-commit hooks
 python -m pip install -r requirements-dev.txt
 pre-commit install

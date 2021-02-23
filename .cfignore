@@ -1,0 +1,4 @@
+static/
+idemia/static
+db.sqlite3
+.venv/
