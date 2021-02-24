@@ -14,8 +14,6 @@ class EnrollmentStatus(models.TextChoices):
 class EnrollmentRecord(models.Model):
     """ EnrollmentRecord objects hold information representing a single enrollment record """
 
-    first_name = models.CharField(max_length=60)
-    last_name = models.CharField(max_length=60)
     record_uuid = models.UUIDField(primary_key=True)
     record_status = models.CharField(
         max_length=20,

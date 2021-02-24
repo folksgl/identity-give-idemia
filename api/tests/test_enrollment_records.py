@@ -86,14 +86,3 @@ class EnrollmentRecordCRUDTest(APITestCase):
         """ Modify an existing enrollment record """
         _response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["record_uuid"]])
-
-        # Modify the first name of the record data and test for persistence
-        new_name = "Bobert"
-        record_data["first_name"] = new_name
-        put_response = self.client.put(url, record_data)
-
-        get_response = self.client.get(url)
-
-        self.assertEqual(put_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(get_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(get_response.data["first_name"], new_name)
