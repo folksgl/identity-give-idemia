@@ -11,3 +11,11 @@ class EnrollmentRecordSerializer(serializers.ModelSerializer):
 
         model = EnrollmentRecord
         fields = "__all__"
+
+
+class EnrollmentRecordCreateSerializer(EnrollmentRecordSerializer):
+    """ Serializer for EnrollmentRecord objects when they are created """
+
+    # added fields from request object. Not stored in database
+    firstName = serializers.CharField()
+    lastName = serializers.CharField()
