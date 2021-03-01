@@ -1,0 +1,4 @@
+---
+- plugins:
+  - bandit:
+      enabled: true
