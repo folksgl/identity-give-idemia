@@ -10,8 +10,11 @@ from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import EnrollmentRecord
+from .models import EnrollmentRecord, EnrollmentStatus
 from .serializers import EnrollmentRecordSerializer
+
+import random
+import string
 
 
 class TransactionServiceUnavailable(APIException):
@@ -64,9 +67,14 @@ class EnrollmentRecordCreate(CreateAPIView):
 
     def perform_create(self, serializer):
         """ Custom logic upon creating an enrollment record """
+
+        # Get UEID from Idemia UEP API
+        ueid = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
+
         log_response = log_transaction()
         if log_response.status_code == status.HTTP_201_CREATED:
-            serializer.save()
+            serializer.save(record_idemia_ueid=ueid)
+            print(serializer.data)
             logging.info("Record Created -- POST to idemia /pre-enrollments")
         else:
             raise TransactionServiceUnavailable()
