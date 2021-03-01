@@ -14,7 +14,8 @@ class EnrollmentStatus(models.TextChoices):
 class EnrollmentRecord(models.Model):
     """ EnrollmentRecord objects hold information representing a single enrollment record """
 
-    record_uuid = models.UUIDField(primary_key=True)
+    record_csp_uuid = models.UUIDField()
+    record_idemia_ueid = models.CharField(max_length=10)
     record_status = models.CharField(
         max_length=20,
         choices=EnrollmentStatus.choices,
@@ -27,6 +28,7 @@ class EnrollmentRecord(models.Model):
         """ EnrollmentRecord Model metadata """
 
         ordering = ["-creation_date"]
+        unique_together = ("record_csp_uuid", "record_idemia_ueid")
 
     @property
     def status(self):
