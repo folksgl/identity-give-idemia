@@ -10,7 +10,11 @@ from api.views import TransactionServiceUnavailable
 
 def generate_enrollment_record_data() -> dict:
     """ Helper method for generating data for an EnrollmentRecord """
-    return {"record_uuid": uuid.uuid4(), "first_name": "Bob", "last_name": "Testington"}
+    return {
+        "record_csp_uuid": uuid.uuid4(),
+        "first_name": "Bob",
+        "last_name": "Testington",
+    }
 
 
 def create_enrollment_record(client):
@@ -66,7 +70,7 @@ class EnrollmentRecordCRUDTest(APITestCase):
         """ Create a user, then test the 'get' operation on that user """
         _response, record_data = create_enrollment_record(self.client)
 
-        url = reverse("enrollment-record", args=[record_data["record_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
         get_response = self.client.get(url)
 
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
@@ -75,7 +79,7 @@ class EnrollmentRecordCRUDTest(APITestCase):
         """ Delete a user that was created """
         _response, record_data = create_enrollment_record(self.client)
 
-        url = reverse("enrollment-record", args=[record_data["record_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
         delete_response = self.client.delete(url)
         self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -85,4 +89,4 @@ class EnrollmentRecordCRUDTest(APITestCase):
     def test_put_enrollment(self):
         """ Modify an existing enrollment record """
         _response, record_data = create_enrollment_record(self.client)
-        url = reverse("enrollment-record", args=[record_data["record_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
