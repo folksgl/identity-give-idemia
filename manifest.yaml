@@ -13,3 +13,4 @@ applications:
     env:
       SECRET_KEY: ((SECRET_KEY))
       DISABLE_COLLECTSTATIC: 1
+      DJANGO_SETTINGS_MODULE: idemia.settings
