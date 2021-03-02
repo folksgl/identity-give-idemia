@@ -1,4 +1,5 @@
 ---
-- plugins:
-  - bandit:
-      enabled: true
+version: "2"
+plugins:
+  bandit:
+    enabled: true
