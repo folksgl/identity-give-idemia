@@ -3,9 +3,11 @@ migrations.py implements the 'Migrate Frequently' section of
 https://docs.huihoo.com/cloudfoundry/documentation/devguide/services/migrate-db.html
 """
 import logging
+import os
 from cfenv import AppEnv
 from django.core.management import execute_from_command_line
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "idemia.settings")
 ENV = AppEnv()
 
 
