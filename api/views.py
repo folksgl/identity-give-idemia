@@ -67,7 +67,7 @@ class EnrollmentRecordCreate(CreateAPIView):
 
     def perform_create(self, serializer):
         """ Custom logic upon creating an enrollment record """
-        host = self.request.META["HOST"]
+        host = self.request.META["HTTP_HOST"]
         # Get UEID from Idemia UEP API
         ueid = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
         serializer.save(record_idemia_ueid=ueid, record_csp_id=host)
@@ -83,8 +83,14 @@ class EnrollmentRecordCreate(CreateAPIView):
 class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
     """ Perform read, update, delete operations on EnrollmentRecord objects """
 
-    queryset = EnrollmentRecord.objects.all()
+    # queryset = EnrollmentRecord.objects.all()
     serializer_class = EnrollmentRecordSerializer
+
+    def get_queryset(self):
+        print(self.request.META["HTTP_HOST"])
+        return EnrollmentRecord.objects.filter(
+            record_csp_id=self.request.META["HTTP_HOST"]
+        )
 
     def get(self, request, *args, **kwargs):
         """ Custom logic upon retrieving an enrollment record """
