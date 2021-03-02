@@ -17,6 +17,11 @@ def generate_enrollment_record_data() -> dict:
     }
 
 
+def generate_meta_data() -> dict:
+    """ Helper method for generating headers for all requests to the microservice """
+    return {"HTTP_HOST": "localhost"}
+
+
 def create_enrollment_record(client):
     """
     Perform a POST operation to the enrollment endpoint. This operation will
@@ -25,7 +30,8 @@ def create_enrollment_record(client):
     """
     url = reverse("enrollment")
     record_data = generate_enrollment_record_data()
-    response = client.post(url, record_data)
+    meta_data = generate_meta_data()
+    response = client.post(url, record_data, **meta_data)
 
     return (response, record_data)
 
@@ -71,7 +77,8 @@ class EnrollmentRecordCRUDTest(APITestCase):
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        get_response = self.client.get(url)
+        meta_data = generate_meta_data()
+        get_response = self.client.get(url, **meta_data)
 
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
 
@@ -80,10 +87,11 @@ class EnrollmentRecordCRUDTest(APITestCase):
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        delete_response = self.client.delete(url)
+        meta_data = generate_meta_data()
+        delete_response = self.client.delete(url, **meta_data)
         self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
 
-        get_response = self.client.get(url)
+        get_response = self.client.get(url, **meta_data)
         self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_put_enrollment(self):
