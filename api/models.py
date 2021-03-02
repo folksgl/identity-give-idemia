@@ -14,6 +14,7 @@ class EnrollmentStatus(models.TextChoices):
 class EnrollmentRecord(models.Model):
     """ EnrollmentRecord objects hold information representing a single enrollment record """
 
+    record_csp_id = models.CharField(max_length=100)
     record_csp_uuid = models.UUIDField()
     record_idemia_ueid = models.CharField(max_length=10)
     record_status = models.CharField(
