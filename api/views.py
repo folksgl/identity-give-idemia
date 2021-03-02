@@ -67,17 +67,17 @@ class EnrollmentRecordCreate(CreateAPIView):
 
     def perform_create(self, serializer):
         """ Custom logic upon creating an enrollment record """
-
+        host = self.request.META["HOST"]
         # Get UEID from Idemia UEP API
         ueid = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
-
-        log_response = log_transaction()
+        serializer.save(record_idemia_ueid=ueid, record_csp_id=host)
+        """log_response = log_transaction()
         if log_response.status_code == status.HTTP_201_CREATED:
             serializer.save(record_idemia_ueid=ueid)
             print(serializer.data)
             logging.info("Record Created -- POST to idemia /pre-enrollments")
         else:
-            raise TransactionServiceUnavailable()
+            raise TransactionServiceUnavailable()"""
 
 
 class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
