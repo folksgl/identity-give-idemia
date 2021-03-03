@@ -107,6 +107,8 @@ After the database has come up, running `cf push --vars-file vars.yaml --var SEC
 #### /enrollment
 Idemia pre-enrollment API functionality.
 
+Direct requests to the microservice require the `X_CONSUMER_CUSTOM_ID` header to be set.
+
 #### /locations
 Exposes in-person proofing locations via the idemia UEP locations API
 
