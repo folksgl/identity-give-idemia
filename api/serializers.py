@@ -14,6 +14,7 @@ class EnrollmentRecordSerializer(serializers.ModelSerializer):
 
         model = EnrollmentRecord
         fields = "__all__"
+        lookup_field = "record_csp_uuid"
 
 
 class EnrollmentRecordCreateSerializer(EnrollmentRecordSerializer):
