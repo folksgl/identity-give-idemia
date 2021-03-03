@@ -48,5 +48,4 @@ jobs:
           POSTGRES_HOST: postgres
           POSTGRES_PORT: 5432
         run: |
-          sleep 30
           python manage.py test --debug-mode
