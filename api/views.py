@@ -67,29 +67,26 @@ class EnrollmentRecordCreate(CreateAPIView):
 
     def perform_create(self, serializer):
         """ Custom logic upon creating an enrollment record """
-        host = self.request.META["HTTP_HOST"]
+        csp_id = self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
         # Get UEID from Idemia UEP API
         ueid = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        serializer.save(record_idemia_ueid=ueid, record_csp_id=host)
-        """log_response = log_transaction()
+        log_response = log_transaction()
         if log_response.status_code == status.HTTP_201_CREATED:
-            serializer.save(record_idemia_ueid=ueid)
-            print(serializer.data)
+            serializer.save(record_idemia_ueid=ueid, record_csp_id=csp_id)
             logging.info("Record Created -- POST to idemia /pre-enrollments")
         else:
-            raise TransactionServiceUnavailable()"""
+            raise TransactionServiceUnavailable()
 
 
 class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
     """ Perform read, update, delete operations on EnrollmentRecord objects """
 
-    # queryset = EnrollmentRecord.objects.all()
     serializer_class = EnrollmentRecordSerializer
+    lookup_field = "record_csp_uuid"
 
     def get_queryset(self):
-        print(self.request.META["HTTP_HOST"])
         return EnrollmentRecord.objects.filter(
-            record_csp_id=self.request.META["HTTP_HOST"]
+            record_csp_id=self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
         )
 
     def get(self, request, *args, **kwargs):
