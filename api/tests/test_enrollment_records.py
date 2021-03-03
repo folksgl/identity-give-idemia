@@ -18,12 +18,12 @@ def generate_enrollment_record_data() -> dict:
     }
 
 
-def generate_meta_data(consumer_id) -> dict:
+def generate_meta_data(consumer_id="consumerA") -> dict:
     """ Helper method for generating headers for all requests to the microservice """
     return {"HTTP_X_CONSUMER_CUSTOM_ID": consumer_id}
 
 
-def create_enrollment_record(client, consumer_id):
+def create_enrollment_record(client, consumer_id="consumerA"):
     """
     Perform a POST operation to the enrollment endpoint. This operation will
     serve as the base for many other tests, and will intentionally generate
@@ -62,8 +62,7 @@ class EnrollmentRecordCRUDTest(APITestCase):
 
     def test_post_enrollment(self):
         """ Test basic enrollment record creation """
-        consumer_id = "consumerA"
-        response, record_data = create_enrollment_record(self.client, consumer_id)
+        response, record_data = create_enrollment_record(self.client)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -71,25 +70,22 @@ class EnrollmentRecordCRUDTest(APITestCase):
     def test_fail_logging(self, mock_post):
         """ Test response to failed transaction logging """
         print("MOCK METHOD")
-        consumer_id = "consumerA"
-        create_enrollment_record(self.client, consumer_id)
+        create_enrollment_record(self.client)
         self.assertRaises(TransactionServiceUnavailable)
 
     def test_get_enrollment(self):
         """ Create a user, then test the 'get' operation on that user """
-        consumer_id = "consumerA"
-        _response, record_data = create_enrollment_record(self.client, consumer_id)
+        _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        meta_data = generate_meta_data(consumer_id)
+        meta_data = generate_meta_data()
         get_response = self.client.get(url, **meta_data)
 
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
 
     def test_get_enrollment_badheader(self):
         """ Create a user, then test the 'get' operation on that user with a bad header """
-        consumer_id = "consumerA"
-        _response, record_data = create_enrollment_record(self.client, consumer_id)
+        _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
         meta_data = generate_meta_data("consumerB")
@@ -99,11 +95,10 @@ class EnrollmentRecordCRUDTest(APITestCase):
 
     def test_delete_enrollment(self):
         """ Delete a user that was created """
-        consumer_id = "consumerA"
-        _response, record_data = create_enrollment_record(self.client, consumer_id)
+        _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        meta_data = generate_meta_data(consumer_id)
+        meta_data = generate_meta_data()
         delete_response = self.client.delete(url, **meta_data)
         self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -112,24 +107,22 @@ class EnrollmentRecordCRUDTest(APITestCase):
 
     def test_delete_enrollment_badheader(self):
         """ Try to delete a user that was created using a bad header"""
-        consumer_id = "consumerA"
-        _response, record_data = create_enrollment_record(self.client, consumer_id)
+        _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
         meta_data = generate_meta_data("consumerB")
         delete_response = self.client.delete(url, **meta_data)
         self.assertEqual(delete_response.status_code, status.HTTP_404_NOT_FOUND)
 
-        meta_data = generate_meta_data(consumer_id)
+        meta_data = generate_meta_data()
         get_response = self.client.get(url, **meta_data)
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
 
     def test_put_enrollment(self):
         """ Modify an existing enrollment record """
-        consumer_id = "consumerA"
-        _response, record_data = create_enrollment_record(self.client, consumer_id)
+        _response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        meta_data = generate_meta_data(consumer_id)
+        meta_data = generate_meta_data()
 
         new_status = EnrollmentStatus.FAILED
         record_data["record_status"] = new_status
@@ -143,8 +136,7 @@ class EnrollmentRecordCRUDTest(APITestCase):
 
     def test_put_enrollment_badheader(self):
         """ Try to modify an existing enrollment record using a bad header"""
-        consumer_id = "consumerA"
-        _response, record_data = create_enrollment_record(self.client, consumer_id)
+        _response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
         meta_data = generate_meta_data("consumerB")
 
@@ -157,7 +149,7 @@ class EnrollmentRecordCRUDTest(APITestCase):
 
         self.assertEqual(put_response.status_code, status.HTTP_404_NOT_FOUND)
 
-        meta_data = generate_meta_data("consumerA")
+        meta_data = generate_meta_data()
         get_response = self.client.get(url, **meta_data)
 
         self.assertEqual(get_response.data["record_status"], old_status)
