@@ -89,8 +89,8 @@ class EnrollmentRecordCRUDTest(TestCase):
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        meta_data = generate_header("consumer_b")
-        get_response = self.client.get(url, **meta_data)
+        request_headers = generate_header("consumer_b")
+        get_response = self.client.get(url, **request_headers)
 
         self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -110,8 +110,8 @@ class EnrollmentRecordCRUDTest(TestCase):
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        meta_data = generate_header("consumer_b")
-        delete_response = self.client.delete(url, **meta_data)
+        request_headers = generate_header("consumer_b")
+        delete_response = self.client.delete(url, **request_headers)
         self.assertEqual(delete_response.status_code, status.HTTP_404_NOT_FOUND)
 
         get_response = self.client.get(url)
@@ -138,14 +138,14 @@ class EnrollmentRecordCRUDTest(TestCase):
         """ Try to modify an existing enrollment record using a bad header"""
         _response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        meta_data = generate_header("consumer_b")
+        request_headers = generate_header("consumer_b")
 
         old_status = _response.data["record_status"]
         new_status = EnrollmentStatus.FAILED
         record_data["record_status"] = new_status
 
-        put_response = self.client.put(url, record_data, **meta_data)
-        get_response = self.client.get(url, **meta_data)
+        put_response = self.client.put(url, record_data, **request_headers)
+        get_response = self.client.get(url, **request_headers)
 
         self.assertEqual(put_response.status_code, status.HTTP_404_NOT_FOUND)
 
