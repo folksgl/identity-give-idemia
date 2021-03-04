@@ -75,7 +75,7 @@ variable and setting it to the string `True`
 
 Setup a local PSQL database to mirror the cloud.gov database used.
 ```
-docker run -d --name dev-postgres -e POSTGRES_PASSWORD=Pass2020! -v /tmp/xyz/:/var/lib/postgresql/data -p 5432:5432 postgres
+docker run -d --name dev-postgres -e POSTGRES_PASSWORD=Pass2020! -v /tmp/idemia-microservice/:/var/lib/postgresql/data -p 5432:5432 postgres
 ```
 
 
