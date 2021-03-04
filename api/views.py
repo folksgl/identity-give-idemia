@@ -67,6 +67,7 @@ class EnrollmentRecordCreate(CreateAPIView):
 
     def perform_create(self, serializer):
         """ Custom logic upon creating an enrollment record """
+        # HTTP_X_CONSUMER_CUSTOM_ID is filtered by API Gateway so no validation required
         csp_id = self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
         # Get UEID from Idemia UEP API
         ueid = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
@@ -85,6 +86,7 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
     lookup_field = "record_csp_uuid"
 
     def get_queryset(self):
+        # HTTP_X_CONSUMER_CUSTOM_ID is filtered by API Gateway so no validation required
         return EnrollmentRecord.objects.filter(
             record_csp_id=self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
         )
