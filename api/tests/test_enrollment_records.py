@@ -152,3 +152,20 @@ class EnrollmentRecordCRUDTest(TestCase):
         get_response = self.client.get(url)
 
         self.assertEqual(get_response.data["record_status"], old_status)
+
+    def test_put_enrollment_ueid_edit_attempt(self):
+        """ Modify an existing enrollment record """
+        _response, record_data = create_enrollment_record(self.client)
+        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
+
+        new_ueid = "ASDFGHJKLA"
+        record_data["record_idemia_ueid"] = new_ueid
+
+        put_response = self.client.put(
+            url, record_data, content_type="application/json"
+        )
+        get_response = self.client.get(url)
+
+        self.assertEqual(put_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(get_response.status_code, status.HTTP_200_OK)
+        self.assertNotEqual(get_response.data["record_idemia_ueid"], new_ueid)
