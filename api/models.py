@@ -30,21 +30,3 @@ class EnrollmentRecord(models.Model):
 
         ordering = ["-creation_date"]
         unique_together = ("record_csp_uuid", "record_csp_id")
-
-    @property
-    def status(self):
-        """ Allow 'get' of the objects 'record_status' field """
-        return self.record_status
-
-    @status.setter
-    def update_enrollment_status(self, new_status: EnrollmentStatus):
-        """ Start the enrollment process for this record """
-        self._status = new_status
-
-    @property
-    def uuid(self):
-        """ Allow reading string representations of the uuid """
-        return str(self.record_uuid)
-
-    def __str__(self):
-        return f"{self.record_uuid}: {self.record_status}"
