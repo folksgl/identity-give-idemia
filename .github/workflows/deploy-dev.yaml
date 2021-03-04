@@ -8,6 +8,8 @@ on:
     workflows: ["Unit-Tests"]
     branches: [main]
     types: [completed]
+    paths-ignore:
+      - '**.md'  # All markdown files in the repository
 
 jobs:
   deploy:
