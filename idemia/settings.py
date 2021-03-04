@@ -104,9 +104,14 @@ if VCAP_ENV_VAR in os.environ:
     }
 else:
     # Local development -- use local DB info
+    # See README for setting up postgres container
     DB_DICT = {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 
 # Database

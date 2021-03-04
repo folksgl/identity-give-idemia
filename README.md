@@ -73,6 +73,11 @@ $Env:SECRET_KEY=<your-secret-here>
 Note: during development, it may also be helpful to add the `DEBUG` environment
 variable and setting it to the string `True`
 
+Setup a local PSQL database to mirror the cloud.gov database used.
+```
+docker run -d --name dev-postgres -e POSTGRES_PASSWORD=postgres -v /tmp/idemia-microservice/:/var/lib/postgresql/data -p 5432:5432 postgres
+```
+
 
 ### Running the application
 After completing [development setup](#development-setup) and
@@ -113,6 +118,8 @@ After the database has come up, running
 ### API Endpoints
 #### /enrollment
 Idemia pre-enrollment API functionality.
+
+Direct requests to the microservice require the `X_CONSUMER_CUSTOM_ID` header to be set.
 
 #### /locations
 Exposes in-person proofing locations via the idemia UEP locations API

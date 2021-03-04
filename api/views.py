@@ -10,8 +10,11 @@ from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import EnrollmentRecord
+from .models import EnrollmentRecord, EnrollmentStatus
 from .serializers import EnrollmentRecordSerializer
+
+import random
+import string
 
 
 class TransactionServiceUnavailable(APIException):
@@ -64,9 +67,13 @@ class EnrollmentRecordCreate(CreateAPIView):
 
     def perform_create(self, serializer):
         """ Custom logic upon creating an enrollment record """
+        # HTTP_X_CONSUMER_CUSTOM_ID is filtered by API Gateway so no validation required
+        csp_id = self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
+        # Get UEID from Idemia UEP API
+        ueid = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
         log_response = log_transaction()
         if log_response.status_code == status.HTTP_201_CREATED:
-            serializer.save()
+            serializer.save(record_idemia_ueid=ueid, record_csp_id=csp_id)
             logging.info("Record Created -- POST to idemia /pre-enrollments")
         else:
             raise TransactionServiceUnavailable()
@@ -75,8 +82,14 @@ class EnrollmentRecordCreate(CreateAPIView):
 class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
     """ Perform read, update, delete operations on EnrollmentRecord objects """
 
-    queryset = EnrollmentRecord.objects.all()
     serializer_class = EnrollmentRecordSerializer
+    lookup_field = "record_csp_uuid"
+
+    def get_queryset(self):
+        # HTTP_X_CONSUMER_CUSTOM_ID is filtered by API Gateway so no validation required
+        return EnrollmentRecord.objects.filter(
+            record_csp_id=self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
+        )
 
     def get(self, request, *args, **kwargs):
         """ Custom logic upon retrieving an enrollment record """
