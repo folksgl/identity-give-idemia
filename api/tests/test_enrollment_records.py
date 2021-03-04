@@ -7,6 +7,7 @@ from django.test import TestCase, Client
 from rest_framework import status
 from api.views import TransactionServiceUnavailable
 from ..models import EnrollmentStatus
+from django.http import HttpResponseBadRequest
 
 
 def generate_enrollment_record_data() -> dict:
@@ -60,7 +61,7 @@ class EnrollmentRecordCRUDTest(TestCase):
     """ Test crud operations on EnrollmentRecord objects """
 
     def setUp(self):
-        self.client = Client(HTTP_X_CONSUMER_CUSTOM_ID="consumer_a")
+        self.client = Client(HTTP_X_CONSUMER_CUSTOM_ID="consumera")
 
     def test_post_enrollment(self):
         """ Test basic enrollment record creation """
@@ -89,7 +90,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        request_headers = generate_header("consumer_b")
+        request_headers = generate_header("consumerb")
         get_response = self.client.get(url, **request_headers)
 
         self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
@@ -110,7 +111,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        request_headers = generate_header("consumer_b")
+        request_headers = generate_header("consumerb")
         delete_response = self.client.delete(url, **request_headers)
         self.assertEqual(delete_response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -138,7 +139,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         """ Try to modify an existing enrollment record using a bad header"""
         _response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
-        request_headers = generate_header("consumer_b")
+        request_headers = generate_header("consumerb")
 
         old_status = _response.data["record_status"]
         new_status = EnrollmentStatus.FAILED
@@ -154,7 +155,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         self.assertEqual(get_response.data["record_status"], old_status)
 
     def test_put_enrollment_ueid_edit_attempt(self):
-        """ Modify an existing enrollment record """
+        """ Attempt to modify an existing enrollment record's ueid """
         _response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
 
