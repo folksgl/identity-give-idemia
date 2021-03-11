@@ -32,10 +32,10 @@ jobs:
       - name: Ensure DB Available
         run: .cloud-gov/ensure_db_available.sh ipp-idemia-db
 
-      - name: Apply CF Network Policies
-        run: |
-          cf add-network-policy ipp-idemia transaction-log
-
       - name: Deploy application
         run: |
           cf push --vars-file vars.yaml --var SECRET_KEY=${{ secrets.SECRET_KEY }} --strategy rolling
+
+      - name: Apply CF Network Policies
+        run: |
+          cf add-network-policy ipp-idemia transaction-log
