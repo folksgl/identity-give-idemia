@@ -21,6 +21,6 @@ class EnrollmentRecordCreateSerializer(EnrollmentRecordSerializer):
     """ Serializer for EnrollmentRecord objects when they are created """
 
     # added fields from request object. Not stored in database
-    firstName = serializers.CharField()
-    lastName = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
     record_status = serializers.CharField(read_only=True)
