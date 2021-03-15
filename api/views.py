@@ -1,62 +1,17 @@
 """ Views for Idemia API """
 import logging
-import requests
-from django.conf import settings
+import random
+import string
 from rest_framework.generics import (
     CreateAPIView,
     RetrieveUpdateDestroyAPIView,
 )
 from rest_framework import status
-from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import EnrollmentRecord, EnrollmentStatus
-from .serializers import EnrollmentRecordSerializer
-
-import random
-import string
-
-
-class TransactionServiceUnavailable(APIException):
-    """ Thrown during errors contacting the transaction logging service """
-
-    status_code = 503
-    default_detail = (
-        "Transaction logging service temporarily unavailable, try again later."
-    )
-    default_code = "service_unavailable"
-
-
-def log_transaction():
-    """
-    Log a transaction to the transaction logging microservice.
-    Returns True if the logging attempt was successful.
-    """
-    if settings.DEBUG:
-        logging.debug("Skipping transaction logging while in debug mode")
-        response = requests.Response()
-        response.status_code = 201
-        return response  # Skip sending a transaction log in debug mode
-
-    logging.info("Logging a transaction to /transaction")
-    transaction_url = (
-        "http://identity-give-transaction-log.apps.internal:8080/transaction/"
-    )
-    payload = {
-        "service_type": "PROOFING SERVICE",
-        "customer": "test_customer",
-        "csp": "test_csp",
-        "cost": 0,
-        "result": "test_result",
-    }
-
-    try:
-        response = requests.post(transaction_url, data=payload)
-        response.raise_for_status()  # Raises HTTPError, if one occurred.
-    except requests.exceptions.RequestException as error:
-        logging.error("Request raised exception: %s", error)
-
-    return response
+from api import transaction_log
+from api.models import EnrollmentRecord
+from api.serializers import EnrollmentRecordSerializer
 
 
 class EnrollmentRecordCreate(CreateAPIView):
@@ -67,16 +22,16 @@ class EnrollmentRecordCreate(CreateAPIView):
 
     def perform_create(self, serializer):
         """ Custom logic upon creating an enrollment record """
-        # HTTP_X_CONSUMER_CUSTOM_ID is filtered by API Gateway so no validation required
+        # Custom ID header is enforced by API Gateway. No validation required
         csp_id = self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
+
         # Get UEID from Idemia UEP API
         ueid = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        log_response = log_transaction()
-        if log_response.status_code == status.HTTP_201_CREATED:
-            serializer.save(record_idemia_ueid=ueid, record_csp_id=csp_id)
-            logging.info("Record Created -- POST to idemia /pre-enrollments")
-        else:
-            raise TransactionServiceUnavailable()
+
+        transaction_log.create_transaction(csp_id)
+
+        serializer.save(record_idemia_ueid=ueid, record_csp_id=csp_id)
+        logging.info("Record Created -- POST to idemia /pre-enrollments")
 
 
 class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
@@ -86,7 +41,7 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
     lookup_field = "record_csp_uuid"
 
     def get_queryset(self):
-        # HTTP_X_CONSUMER_CUSTOM_ID is filtered by API Gateway so no validation required
+        # Custom ID header is enforced by API Gateway. No validation required
         return EnrollmentRecord.objects.filter(
             record_csp_id=self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
         )
@@ -111,9 +66,12 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
 
 
 @api_view(http_method_names=["GET"])
-def location_view(_request, zipcode):
+def location_view(request, zipcode):
     """ Exposes the /locations idemia UEP endpoint """
     logging.info("Calling Idemia /locations endpoint with zipcode: %s", zipcode)
+
+    csp_id = request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
+    log_response = transaction_log.create_transaction(csp_id)
 
     # Dummy location info
     location_list = [
@@ -179,4 +137,5 @@ def location_view(_request, zipcode):
         },
     ]
 
+    transaction_log.update_transaction_result(log_response["record_uuid"], "pass")
     return Response(location_list)

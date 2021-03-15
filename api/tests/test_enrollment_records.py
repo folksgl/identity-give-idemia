@@ -1,13 +1,12 @@
 """ Run basic CRUD tests on EnrollmentRecord objects """
 import uuid
-import requests
 from unittest import mock
+import requests
 from django.urls import reverse
 from django.test import TestCase, Client
 from rest_framework import status
-from api.views import TransactionServiceUnavailable
-from ..models import EnrollmentStatus
-from django.http import HttpResponseBadRequest
+from api.transaction_log import TransactionServiceUnavailable
+from api.models import EnrollmentStatus
 
 
 def generate_enrollment_record_data() -> dict:
@@ -65,7 +64,7 @@ class EnrollmentRecordCRUDTest(TestCase):
 
     def test_post_enrollment(self):
         """ Test basic enrollment record creation """
-        response, record_data = create_enrollment_record(self.client)
+        response, _record_data = create_enrollment_record(self.client)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -137,11 +136,11 @@ class EnrollmentRecordCRUDTest(TestCase):
 
     def test_put_enrollment_badheader(self):
         """ Try to modify an existing enrollment record using a bad header"""
-        _response, record_data = create_enrollment_record(self.client)
+        response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
         request_headers = generate_header("consumerb")
 
-        old_status = _response.data["record_status"]
+        old_status = response.data["record_status"]
         new_status = EnrollmentStatus.FAILED
         record_data["record_status"] = new_status
 
