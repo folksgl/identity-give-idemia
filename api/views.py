@@ -137,5 +137,4 @@ def location_view(request, zipcode):
         },
     ]
 
-    transaction_log.update_transaction_result(log_response["record_uuid"], "pass")
     return Response(location_list)

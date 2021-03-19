@@ -18,7 +18,7 @@ class TransactionServiceUnavailable(APIException):
     default_code = "service_unavailable"
 
 
-def create_transaction(csp: str, cost=0, result="unknown") -> dict:
+def create_transaction(csp: str, cost=0, result=None) -> dict:
     """
     Log a transaction to the transaction logging microservice.
     Returns True if the logging attempt was successful.
@@ -36,7 +36,7 @@ def create_transaction(csp: str, cost=0, result="unknown") -> dict:
     }
 
     try:
-        response = requests.post(TRANSACTION_URL, data=payload)
+        response = requests.post(TRANSACTION_URL, json=payload)
         response.raise_for_status()  # Raises HTTPError, if one occurred.
     except requests.exceptions.RequestException as error:
         logging.error("Request raised exception: %s", error)
@@ -54,7 +54,7 @@ def update_transaction_result(record_uuid: str, result: str) -> dict:
     url = f"{TRANSACTION_URL}{record_uuid}/"
 
     try:
-        response = requests.patch(url, data={"result": result})
+        response = requests.patch(url, json={"result": result})
         response.raise_for_status()  # Raises HTTPError, if one occurred.
     except requests.exceptions.RequestException as error:
         logging.error("Request raised exception: %s", error)
