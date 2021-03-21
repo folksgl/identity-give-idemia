@@ -12,7 +12,7 @@ from api.models import EnrollmentStatus
 def generate_enrollment_record_data() -> dict:
     """ Helper method for generating data for an EnrollmentRecord """
     return {
-        "record_csp_uuid": uuid.uuid4(),
+        "csp_user_uuid": uuid.uuid4(),
         "first_name": "Bob",
         "last_name": "Testington",
     }
@@ -79,7 +79,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         """ Create a user, then test the 'get' operation on that user """
         _response, record_data = create_enrollment_record(self.client)
 
-        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
         get_response = self.client.get(url)
 
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
@@ -88,7 +88,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         """ Create a user, then test the 'get' operation on that user with a bad header """
         _response, record_data = create_enrollment_record(self.client)
 
-        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
         request_headers = generate_header("consumerb")
         get_response = self.client.get(url, **request_headers)
 
@@ -98,7 +98,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         """ Delete a user that was created """
         _response, record_data = create_enrollment_record(self.client)
 
-        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
         delete_response = self.client.delete(url)
         self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -109,7 +109,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         """ Try to delete a user that was created using a bad header"""
         _response, record_data = create_enrollment_record(self.client)
 
-        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
         request_headers = generate_header("consumerb")
         delete_response = self.client.delete(url, **request_headers)
         self.assertEqual(delete_response.status_code, status.HTTP_404_NOT_FOUND)
@@ -120,10 +120,10 @@ class EnrollmentRecordCRUDTest(TestCase):
     def test_put_enrollment(self):
         """ Modify an existing enrollment record """
         _response, record_data = create_enrollment_record(self.client)
-        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
 
         new_status = EnrollmentStatus.FAILED
-        record_data["record_status"] = new_status
+        record_data["status"] = new_status
 
         put_response = self.client.put(
             url, record_data, content_type="application/json"
@@ -132,17 +132,17 @@ class EnrollmentRecordCRUDTest(TestCase):
 
         self.assertEqual(put_response.status_code, status.HTTP_200_OK)
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
-        self.assertEqual(get_response.data["record_status"], new_status)
+        self.assertEqual(get_response.data["status"], new_status)
 
     def test_put_enrollment_badheader(self):
         """ Try to modify an existing enrollment record using a bad header"""
         response, record_data = create_enrollment_record(self.client)
-        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
         request_headers = generate_header("consumerb")
 
-        old_status = response.data["record_status"]
+        old_status = response.data["status"]
         new_status = EnrollmentStatus.FAILED
-        record_data["record_status"] = new_status
+        record_data["status"] = new_status
 
         put_response = self.client.put(url, record_data, **request_headers)
         get_response = self.client.get(url, **request_headers)
@@ -151,15 +151,15 @@ class EnrollmentRecordCRUDTest(TestCase):
 
         get_response = self.client.get(url)
 
-        self.assertEqual(get_response.data["record_status"], old_status)
+        self.assertEqual(get_response.data["status"], old_status)
 
     def test_put_enrollment_ueid_edit_attempt(self):
         """ Attempt to modify an existing enrollment record's ueid """
         _response, record_data = create_enrollment_record(self.client)
-        url = reverse("enrollment-record", args=[record_data["record_csp_uuid"]])
+        url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
 
         new_ueid = "ASDFGHJKLA"
-        record_data["record_idemia_ueid"] = new_ueid
+        record_data["idemia_ueid"] = new_ueid
 
         put_response = self.client.put(
             url, record_data, content_type="application/json"
@@ -168,4 +168,4 @@ class EnrollmentRecordCRUDTest(TestCase):
 
         self.assertEqual(put_response.status_code, status.HTTP_200_OK)
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
-        self.assertNotEqual(get_response.data["record_idemia_ueid"], new_ueid)
+        self.assertNotEqual(get_response.data["idemia_ueid"], new_ueid)

@@ -30,7 +30,7 @@ class EnrollmentRecordCreate(CreateAPIView):
 
         transaction_log.create_transaction(csp_id)
 
-        serializer.save(record_idemia_ueid=ueid, record_csp_id=csp_id)
+        serializer.save(idemia_ueid=ueid, csp_id=csp_id)
         logging.info("Record Created -- POST to idemia /pre-enrollments")
 
 
@@ -38,12 +38,12 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
     """ Perform read, update, delete operations on EnrollmentRecord objects """
 
     serializer_class = EnrollmentRecordSerializer
-    lookup_field = "record_csp_uuid"
+    lookup_field = "csp_user_uuid"
 
     def get_queryset(self):
         # Custom ID header is enforced by API Gateway. No validation required
         return EnrollmentRecord.objects.filter(
-            record_csp_id=self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
+            csp_id=self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
         )
 
     def get(self, request, *args, **kwargs):
@@ -71,7 +71,7 @@ def location_view(request, zipcode):
     logging.info("Calling Idemia /locations endpoint with zipcode: %s", zipcode)
 
     csp_id = request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
-    log_response = transaction_log.create_transaction(csp_id)
+    transaction_log.create_transaction(csp_id)
 
     # Dummy location info
     location_list = [

@@ -18,7 +18,7 @@ urlpatterns = [
     path("locations/<zipcode>", views.location_view, name="locations"),
     path("enrollment/", decorated_enrollmentcreate_view, name="enrollment"),
     path(
-        "enrollment/<uuid:record_csp_uuid>",
+        "enrollment/<uuid:csp_user_uuid>",
         views.EnrollmentRecordDetail.as_view(),
         name="enrollment-record",
     ),
