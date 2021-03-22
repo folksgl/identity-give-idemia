@@ -3,9 +3,9 @@ version: 1
 applications:
   - name: ipp-idemia
     routes:
-      - route: identity-give-ipp.apps.internal
-    memory: ((memory))
-    instances: ((instances))
+      - route: ((ROUTE))
+    memory: ((MEMORY))
+    instances: ((INSTANCES))
     services:
       - ipp-idemia-db
     buildpacks:
@@ -13,3 +13,4 @@ applications:
     env:
       SECRET_KEY: ((SECRET_KEY))
       DJANGO_SETTINGS_MODULE: idemia.settings
+      TRANSACTION_ROUTE: ((TRANSACTION_ROUTE))

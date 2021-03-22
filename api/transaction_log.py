@@ -5,7 +5,8 @@ from django.conf import settings
 from rest_framework.exceptions import APIException
 
 # TRANSACTION_URL = "http://localhost:8000/transaction/"
-TRANSACTION_URL = "http://identity-give-transaction-log.apps.internal:8080/transaction/"
+TRANSACTION_ROUTE = os.environ["TRANSACTION_ROUTE"]
+TRANSACTION_URL = f"http://{TRANSACTION_ROUTE}:8080/transaction/"
 
 _DEBUG_RESPONSE = {"record_uuid": "fake-uuid"}
 

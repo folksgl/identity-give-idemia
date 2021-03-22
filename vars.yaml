@@ -1,3 +1,5 @@
 ---
-instances: 2
-memory: 128M
+INSTANCES: 2
+MEMORY: 128M
+ROUTE: identity-give-ipp-dev.apps.internal
+TRANSACTION_ROUTE: identity-give-transaction-log-dev.apps.internal
