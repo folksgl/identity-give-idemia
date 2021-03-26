@@ -15,11 +15,11 @@ The codeql-analysis workflow the CodeQL semantic code analysis engine to help
 find security issues very early on in the development process. See
 [CodeQL](https://securitylab.github.com/tools/codeql) for more details.
 
-## Deploy Dev
-Deploys the project to the GIVE dev environment within Cloud.gov. The
-deploy-dev workflow will only run if the unit-tests workflow completes
-successfully and will only be triggered in the 18F repository. This will
-prevent forks from needlessly running workflows that will always fail
+## Deploy
+Deploys the project to the correct GIVE environment within Cloud.gov. The
+deploy workflow will run unit-tests and only deploy if those test are
+successful. Deployment will also only be triggered in the 18F repository. This
+will prevent forks from needlessly running workflows that will always fail
 (forks won't be able to authenticate into the dev environment).
 
 ## Stale Items
@@ -29,4 +29,6 @@ marked stale for 5 days, the workflow will close the item.
 
 ## Unit Tests
 The unit-tests workflow will install the project runtime dependencies and run
-the unit test suite against the code.
+the unit test suite against the code. This workflow is used to run unit tests
+for the application against pull requests before merging takes place. Additional
+unit testing will take place on merging.
