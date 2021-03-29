@@ -77,12 +77,12 @@ jobs:
           if [[ $GITHUB_REF == "refs/heads/main" ]]; then
               # Pushes to main are deployed to dev
               target_environment=give-dev
-              service_route=identity-give-ipp-dev.apps.internal
+              service_route=identity-give-idemia-dev.apps.internal
               transaction_route=identity-give-transaction-log-dev.apps.internal
           elif [[ $GITHUB_REF =~ refs/tags/* ]]; then
               # Tags on main are deployed to test
               target_environment=give-test
-              service_route=identity-give-ipp-test.apps.internal
+              service_route=identity-give-idemia-test.apps.internal
               transaction_route=identity-give-transaction-log-test.apps.internal
           else
               echo 'Unknown deployment target'
@@ -99,7 +99,7 @@ jobs:
         run: cf target -o ${{ secrets.CF_ORG }} -s ${{ steps.deployment-target.outputs.SPACE }}
 
       - name: Ensure DB Available
-        run: .cloud-gov/ensure_db_available.sh ipp-idemia-db
+        run: .cloud-gov/ensure_db_available.sh idemia-db
 
       - name: Deploy application
         run: cf push --vars-file vars.yaml
@@ -109,4 +109,4 @@ jobs:
           --strategy rolling
 
       - name: Apply CF Network Policies
-        run: cf add-network-policy ipp-idemia transaction-log
+        run: cf add-network-policy idemia transaction-log

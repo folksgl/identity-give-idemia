@@ -1,6 +1,6 @@
-![Tests](https://github.com/18F/identity-give-ipp-idemia/workflows/Unit-Tests/badge.svg)
-[![Maintainability](https://api.codeclimate.com/v1/badges/7a72205acec6d179707c/maintainability)](https://codeclimate.com/github/18F/identity-give-ipp-idemia/maintainability)
-![Black](https://github.com/18F/identity-give-ipp-idemia/workflows/Black/badge.svg)
+![Tests](https://github.com/18F/identity-give-idemia/workflows/Unit-Tests/badge.svg)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7a72205acec6d179707c/maintainability)](https://codeclimate.com/github/18F/identity-give-idemia/maintainability)
+![Black](https://github.com/18F/identity-give-idemia/workflows/Black/badge.svg)
 ![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)
 
 # GIVE Idemia In-Person-Proofing Microservice
@@ -16,13 +16,13 @@ the following goals:
 
 ## CI/CD Workflows with GitHub Actions
 The most up-to-date information about the CI/CD flows for this repo can be found in the
-[GitHub workflows directory](https://github.com/18F/identity-give-ipp-idemia/tree/main/.github/workflows)
+[GitHub workflows directory](https://github.com/18F/identity-give-idemia/tree/main/.github/workflows)
 
 ## Building Locally
 
 ### Pre-requisites
 Make sure you have the following installed if you intend to build the project locally.
-- [Python 3.9](https://www.python.org/)
+- [Python 3](https://www.python.org/) (Check [runtime.txt](runtime.txt) for specific version)
 - [CloudFoundry CLI](https://docs.cloudfoundry.org/cf-cli/)
 
 ### Development Setup
@@ -30,8 +30,8 @@ To set up your environment, run the following commands (or the equivalent
 commands if not using a bash-like terminal):
 ```shell
 # Clone the project
-git clone https://github.com/18F/identity-give-ipp-idemia
-cd identity-give-ipp-idemia
+git clone https://github.com/18F/identity-give-idemia
+cd identity-give-idemia
 
 # Set up Python virtual environment
 python3.9 -m venv .venv
@@ -102,14 +102,14 @@ a vars.yaml file that includes runtime variables referenced. For info, see
 The application database must be deployed prior to the application, and can be
 deployed with the following commands:
 ```shell
-cf create-service aws-rds <plan> ipp-idemia-db
+cf create-service aws-rds <plan> idemia-db
 ```
 
 *You must wait* until the database has completed provisioning to continue with
-the deployment. Wait for the `status` field of `cf service ipp-idemia-db` to
+the deployment. Wait for the `status` field of `cf service idemia-db` to
 change from `create in progress` to `create succeeded`.
 ```shell
-watch -n 15 cf service ipp-idemia-db
+watch -n 15 cf service idemia-db
 ```
 
 After the database has come up, running

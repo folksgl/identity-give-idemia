@@ -1,13 +1,13 @@
 ---
 version: 1
 applications:
-  - name: ipp-idemia
+  - name: idemia
     routes:
       - route: ((ROUTE))
     memory: ((MEMORY))
     instances: ((INSTANCES))
     services:
-      - ipp-idemia-db
+      - idemia-db
     buildpacks:
       - python_buildpack
     env:
