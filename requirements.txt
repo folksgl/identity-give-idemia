@@ -1,4 +1,5 @@
 django ~= 3.2
+django-prometheus
 djangorestframework ~= 3.12
 gunicorn ~= 20.1
 cfenv == 0.5.3

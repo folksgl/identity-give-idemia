@@ -4,13 +4,13 @@ from api.models import EnrollmentRecord
 
 
 class EnrollmentRecordSerializer(serializers.ModelSerializer):
-    """ Serializer for EnrollmentRecord objects """
+    """Serializer for EnrollmentRecord objects"""
 
     csp_id = serializers.CharField(read_only=True)
     idemia_ueid = serializers.CharField(read_only=True)
 
     class Meta:
-        """ EnrollmentRecordSerializer metadata """
+        """EnrollmentRecordSerializer metadata"""
 
         model = EnrollmentRecord
         fields = "__all__"
@@ -18,7 +18,7 @@ class EnrollmentRecordSerializer(serializers.ModelSerializer):
 
 
 class EnrollmentRecordCreateSerializer(EnrollmentRecordSerializer):
-    """ Serializer for EnrollmentRecord objects when they are created """
+    """Serializer for EnrollmentRecord objects when they are created"""
 
     # added fields from request object. Not stored in database
     first_name = serializers.CharField()

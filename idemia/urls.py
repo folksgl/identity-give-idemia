@@ -29,6 +29,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("", include("api.urls")),
+    path("", include("django_prometheus.urls")),
     # path to download json or yaml open api spec file
     re_path(
         r"^doc(?P<format>\.json|\.yaml)$",

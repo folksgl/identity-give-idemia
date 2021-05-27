@@ -15,13 +15,13 @@ from api.serializers import EnrollmentRecordSerializer
 
 
 class EnrollmentRecordCreate(CreateAPIView):
-    """ Create EnrollmentRecord objects """
+    """Create EnrollmentRecord objects"""
 
     queryset = EnrollmentRecord.objects.all()
     serializer_class = EnrollmentRecordSerializer
 
     def perform_create(self, serializer):
-        """ Custom logic upon creating an enrollment record """
+        """Custom logic upon creating an enrollment record"""
         # Custom ID header is enforced by API Gateway. No validation required
         csp_id = self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
 
@@ -35,7 +35,7 @@ class EnrollmentRecordCreate(CreateAPIView):
 
 
 class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
-    """ Perform read, update, delete operations on EnrollmentRecord objects """
+    """Perform read, update, delete operations on EnrollmentRecord objects"""
 
     serializer_class = EnrollmentRecordSerializer
     lookup_field = "csp_user_uuid"
@@ -47,7 +47,7 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
         )
 
     def get(self, request, *args, **kwargs):
-        """ Custom logic upon retrieving an enrollment record """
+        """Custom logic upon retrieving an enrollment record"""
         response = self.retrieve(request, *args, **kwargs)
         if response.status_code == status.HTTP_200_OK:
             logging.info("Record Retrieved - GET on idemia /pre-enrollments/UEID")
@@ -55,19 +55,19 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
         return response
 
     def perform_update(self, serializer):
-        """ Custom logic upon updating an enrollment record """
+        """Custom logic upon updating an enrollment record"""
         logging.info("Record Updated")
         serializer.save()
 
     def perform_destroy(self, instance):
-        """ Custom logic upon deleting an enrollment record """
+        """Custom logic upon deleting an enrollment record"""
         logging.info("Record Deleted")
         instance.delete()
 
 
 @api_view(http_method_names=["GET"])
 def location_view(request, zipcode):
-    """ Exposes the /locations idemia UEP endpoint """
+    """Exposes the /locations idemia UEP endpoint"""
     logging.info("Calling Idemia /locations endpoint with zipcode: %s", zipcode)
 
     csp_id = request.META["HTTP_X_CONSUMER_CUSTOM_ID"]

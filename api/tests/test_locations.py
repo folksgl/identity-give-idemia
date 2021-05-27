@@ -5,15 +5,15 @@ from rest_framework import status
 
 
 def generate_header(consumer_id) -> dict:
-    """ Helper method for generating enrollment record request headers """
+    """Helper method for generating enrollment record request headers"""
     return {"HTTP_X_CONSUMER_CUSTOM_ID": consumer_id}
 
 
 class LocationsTest(APITestCase):
-    """ Test the allowable HTTP methods on the idemia location microservice """
+    """Test the allowable HTTP methods on the idemia location microservice"""
 
     def test_locations(self):
-        """ Ensure that the /locations endpoint returns location data """
+        """Ensure that the /locations endpoint returns location data"""
         url = reverse("locations", args=[00000])
         headers = generate_header("test_user_id")
         response = self.client.get(url, **headers)

@@ -3,7 +3,7 @@ from django.db import models
 
 
 class EnrollmentStatus(models.TextChoices):
-    """ Status states for EnrollmentRecord objects """
+    """Status states for EnrollmentRecord objects"""
 
     PENDING = "PENDING"
     IN_PROGRESS = "IN PROGRESS"
@@ -12,7 +12,7 @@ class EnrollmentStatus(models.TextChoices):
 
 
 class EnrollmentRecord(models.Model):
-    """ EnrollmentRecord objects hold information representing a single enrollment record """
+    """EnrollmentRecord objects hold information representing a single enrollment record"""
 
     # This vaue is captured from the request headers, and comes from the
     # custom_id stored in the Kong consumer for this CSP
@@ -35,7 +35,7 @@ class EnrollmentRecord(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
-        """ EnrollmentRecord Model metadata """
+        """EnrollmentRecord Model metadata"""
 
         ordering = ["-creation_date"]
         unique_together = ("csp_user_uuid", "csp_id")

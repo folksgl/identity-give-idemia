@@ -13,7 +13,7 @@ _DEBUG_RESPONSE = {"record_uuid": "fake-uuid"}
 
 
 class TransactionServiceUnavailable(APIException):
-    """ Thrown during errors contacting the transaction logging service """
+    """Thrown during errors contacting the transaction logging service"""
 
     status_code = 503
     default_detail = "Transaction logging service temporarily unavailable."
@@ -48,7 +48,7 @@ def create_transaction(csp: str, cost=0, result=None) -> dict:
 
 
 def update_transaction_result(record_uuid: str, result: str) -> dict:
-    """ Update information in an existing transaction record """
+    """Update information in an existing transaction record"""
     if settings.DEBUG:
         logging.debug("Skipping transaction logging update while in debug mode")
         return _DEBUG_RESPONSE  # Skip sending a transaction log in debug mode

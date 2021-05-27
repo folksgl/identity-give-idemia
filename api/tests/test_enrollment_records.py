@@ -10,7 +10,7 @@ from api.models import EnrollmentStatus
 
 
 def generate_enrollment_record_data() -> dict:
-    """ Helper method for generating data for an EnrollmentRecord """
+    """Helper method for generating data for an EnrollmentRecord"""
     return {
         "csp_user_uuid": uuid.uuid4(),
         "first_name": "Bob",
@@ -19,7 +19,7 @@ def generate_enrollment_record_data() -> dict:
 
 
 def generate_header(consumer_id) -> dict:
-    """ Helper method for generating enrollment record request headers """
+    """Helper method for generating enrollment record request headers"""
     return {"HTTP_X_CONSUMER_CUSTOM_ID": consumer_id}
 
 
@@ -37,10 +37,10 @@ def create_enrollment_record(client):
 
 
 class EnrollmentAllowedMethodTest(TestCase):
-    """ Test the allowable HTTP methods on the idemia API endpoints """
+    """Test the allowable HTTP methods on the idemia API endpoints"""
 
     def test_allowed_enrollment_methods(self):
-        """ Ensure that only POST operations are allowed on the enrollment endpoint """
+        """Ensure that only POST operations are allowed on the enrollment endpoint"""
         url = reverse("enrollment")
         response = self.client.options(url)
         actions = response.data["actions"]
@@ -57,26 +57,26 @@ def mocked_requests_post1(*args, **kwargs):
 
 
 class EnrollmentRecordCRUDTest(TestCase):
-    """ Test crud operations on EnrollmentRecord objects """
+    """Test crud operations on EnrollmentRecord objects"""
 
     def setUp(self):
         self.client = Client(HTTP_X_CONSUMER_CUSTOM_ID="consumera")
 
     def test_post_enrollment(self):
-        """ Test basic enrollment record creation """
+        """Test basic enrollment record creation"""
         response, _record_data = create_enrollment_record(self.client)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     @mock.patch("requests.post", side_effect=mocked_requests_post1)
     def test_fail_logging(self, mock_post):
-        """ Test response to failed transaction logging """
+        """Test response to failed transaction logging"""
         print("MOCK METHOD")
         create_enrollment_record(self.client)
         self.assertRaises(TransactionServiceUnavailable)
 
     def test_get_enrollment(self):
-        """ Create a user, then test the 'get' operation on that user """
+        """Create a user, then test the 'get' operation on that user"""
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
@@ -85,7 +85,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
 
     def test_get_enrollment_badheader(self):
-        """ Create a user, then test the 'get' operation on that user with a bad header """
+        """Create a user, then test the 'get' operation on that user with a bad header"""
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
@@ -95,7 +95,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_enrollment(self):
-        """ Delete a user that was created """
+        """Delete a user that was created"""
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
@@ -106,7 +106,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_enrollment_badheader(self):
-        """ Try to delete a user that was created using a bad header"""
+        """Try to delete a user that was created using a bad header"""
         _response, record_data = create_enrollment_record(self.client)
 
         url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
@@ -118,7 +118,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
 
     def test_put_enrollment(self):
-        """ Modify an existing enrollment record """
+        """Modify an existing enrollment record"""
         _response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
 
@@ -135,7 +135,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         self.assertEqual(get_response.data["status"], new_status)
 
     def test_put_enrollment_badheader(self):
-        """ Try to modify an existing enrollment record using a bad header"""
+        """Try to modify an existing enrollment record using a bad header"""
         response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
         request_headers = generate_header("consumerb")
@@ -154,7 +154,7 @@ class EnrollmentRecordCRUDTest(TestCase):
         self.assertEqual(get_response.data["status"], old_status)
 
     def test_put_enrollment_ueid_edit_attempt(self):
-        """ Attempt to modify an existing enrollment record's ueid """
+        """Attempt to modify an existing enrollment record's ueid"""
         _response, record_data = create_enrollment_record(self.client)
         url = reverse("enrollment-record", args=[record_data["csp_user_uuid"]])
 
