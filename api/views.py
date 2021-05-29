@@ -9,7 +9,6 @@ from rest_framework.generics import (
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from api import transaction_log
 from api.models import EnrollmentRecord
 from api.serializers import EnrollmentRecordSerializer
 
@@ -22,13 +21,10 @@ class EnrollmentRecordCreate(CreateAPIView):
 
     def perform_create(self, serializer):
         """Custom logic upon creating an enrollment record"""
-        # Custom ID header is enforced by API Gateway. No validation required
         csp_id = self.request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
 
         # Get UEID from Idemia UEP API
         ueid = "".join(random.choices(string.ascii_uppercase + string.digits, k=10))
-
-        transaction_log.create_transaction(csp_id)
 
         serializer.save(idemia_ueid=ueid, csp_id=csp_id)
         logging.info("Record Created -- POST to idemia /pre-enrollments")
@@ -66,12 +62,9 @@ class EnrollmentRecordDetail(RetrieveUpdateDestroyAPIView):
 
 
 @api_view(http_method_names=["GET"])
-def location_view(request, zipcode):
+def location_view(_request, zipcode):
     """Exposes the /locations idemia UEP endpoint"""
     logging.info("Calling Idemia /locations endpoint with zipcode: %s", zipcode)
-
-    csp_id = request.META["HTTP_X_CONSUMER_CUSTOM_ID"]
-    transaction_log.create_transaction(csp_id)
 
     # Dummy location info
     location_list = [

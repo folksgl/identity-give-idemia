@@ -1,11 +1,8 @@
 """ Run basic CRUD tests on EnrollmentRecord objects """
 import uuid
-from unittest import mock
-import requests
 from django.urls import reverse
 from django.test import TestCase, Client
 from rest_framework import status
-from api.transaction_log import TransactionServiceUnavailable
 from api.models import EnrollmentStatus
 
 
@@ -50,12 +47,6 @@ class EnrollmentAllowedMethodTest(TestCase):
         self.assertEqual(allowed_methods, ["POST"])
 
 
-def mocked_requests_post1(*args, **kwargs):
-    response = requests.Response()
-    response.status_code = 503
-    return response
-
-
 class EnrollmentRecordCRUDTest(TestCase):
     """Test crud operations on EnrollmentRecord objects"""
 
@@ -67,13 +58,6 @@ class EnrollmentRecordCRUDTest(TestCase):
         response, _record_data = create_enrollment_record(self.client)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    @mock.patch("requests.post", side_effect=mocked_requests_post1)
-    def test_fail_logging(self, mock_post):
-        """Test response to failed transaction logging"""
-        print("MOCK METHOD")
-        create_enrollment_record(self.client)
-        self.assertRaises(TransactionServiceUnavailable)
 
     def test_get_enrollment(self):
         """Create a user, then test the 'get' operation on that user"""

@@ -4,19 +4,13 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 
 
-def generate_header(consumer_id) -> dict:
-    """Helper method for generating enrollment record request headers"""
-    return {"HTTP_X_CONSUMER_CUSTOM_ID": consumer_id}
-
-
 class LocationsTest(APITestCase):
     """Test the allowable HTTP methods on the idemia location microservice"""
 
     def test_locations(self):
         """Ensure that the /locations endpoint returns location data"""
-        url = reverse("locations", args=[00000])
-        headers = generate_header("test_user_id")
-        response = self.client.get(url, **headers)
+        url = reverse("locations", args=[12345])
+        response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(isinstance(response.data, list))

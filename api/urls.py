@@ -1,10 +1,9 @@
 """ Define URLs for the Django application """
 from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework import status
-from . import views
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import EnrollmentRecordCreateSerializer, EnrollmentRecordSerializer
+from api import views
+from api.serializers import EnrollmentRecordCreateSerializer, EnrollmentRecordSerializer
 
 decorated_enrollmentcreate_view = swagger_auto_schema(
     method="post",
