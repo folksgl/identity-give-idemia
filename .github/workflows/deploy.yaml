@@ -107,6 +107,3 @@ jobs:
           --var ROUTE=${{ steps.deployment-target.outputs.ROUTE }}
           --var TRANSACTION_ROUTE=${{ steps.deployment-target.outputs.TRANSACTION_ROUTE }}
           --strategy rolling
-
-      - name: Apply CF Network Policies
-        run: cf add-network-policy idemia transaction-log
